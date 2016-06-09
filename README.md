@@ -104,6 +104,8 @@ play.ws.timeout.idle = 2000
 play.ws.timeout.request = 2000
 
 play.http.filters = filters.MyFilters
+
+play.modules.enabled += "modules.ProdModule"
 ```
 
 By default this library reads security configuration from the `conf/security_rules.conf` file.
