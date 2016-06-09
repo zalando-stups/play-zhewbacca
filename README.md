@@ -21,10 +21,12 @@ To configure Development environment:
 ```scala
 import com.google.inject.AbstractModule
 import org.zalando.zhewbacca._
+import org.zalando.zhewbacca.metrics.{NoOpPlugableMetrics, PlugableMetrics}
 
 class DevModule extends AbstractModule {
 
   override def configure(): Unit = {
+    bind(classOf[PlugableMetrics]).to(classOf[NoOpPlugableMetrics])
     bind(classOf[AuthProvider]).to(classOf[AlwaysPassAuthProvider])
   }
 
@@ -36,6 +38,7 @@ For Production environment use:
 ```scala
 import com.google.inject.{ TypeLiteral, AbstractModule }
 import org.zalando.zhewbacca._
+import org.zalando.zhewbacca.metrics.{NoOpPlugableMetrics, PlugableMetrics}
 
 import scala.concurrent.Future
 
@@ -43,11 +46,16 @@ class ProdModule extends AbstractModule {
 
   override def configure(): Unit = {
     bind(classOf[AuthProvider]).to(classOf[OAuth2AuthProvider])
+    bind(classOf[PlugableMetrics]).to(classOf[NoOpPlugableMetrics])
     bind(new TypeLiteral[(OAuth2Token) => Future[Option[TokenInfo]]]() {}).to(classOf[IAMClient])
   }
 
 }
 ```
+
+By default no metrics mechanism is used. User can implement ```PlugableMetrics``` to gather some simple metrics.
+See ```org.zalando.zhewbacca.IAMClient``` to learn what can be measured.
+
 
 You need to include `de.zalando.seo.play.security.SecurityFilter` into your applications' filters:
 
@@ -94,6 +102,8 @@ play.ws.timeout.idle = 2000
 # The total time you accept a request to take. It will be interrupted, whatever if the remote host is still sending data.
 # Play's default is none, to allow stream consuming.
 play.ws.timeout.request = 2000
+
+play.http.filters = filters.MyFilters
 ```
 
 By default this library reads security configuration from the `conf/security_rules.conf` file.
