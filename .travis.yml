@@ -1,0 +1,17 @@
+language: scala
+
+scala:
+    - 2.11.7
+
+jdk:
+    - oraclejdk8
+
+script: sbt coverage test
+
+# go faster on travis
+sudo: false
+
+notifications:
+    email:
+        - cezary.lada.extern@zalando.de
+
