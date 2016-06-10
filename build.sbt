@@ -11,9 +11,7 @@ val commonSettings = Seq(
   publishTo := Some("releases" at "https://maven.zalando.net/content/repositories/releases"),
   publishMavenStyle := true,
   publishArtifact in Test := false,
-  credentials += Credentials(Path.userHome / ".ivy2" / ".credentials"),
   resolvers := Seq(
-    "zalando-nexus"     at "https://maven.zalando.net/content/repositories/releases",
     "scalaz-bintray"    at "http://dl.bintray.com/scalaz/releases",
     "scoverage-bintray" at "https://dl.bintray.com/sksamuel/sbt-plugins/"
   )
