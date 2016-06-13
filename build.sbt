@@ -8,9 +8,16 @@ val commonSettings = Seq(
   version := "0.2",
   scalaVersion := "2.11.7",
   scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8"),
-  publishTo := Some("releases" at "https://maven.zalando.net/content/repositories/releases"),
+  publishTo := {
+    val nexus = "https://oss.sonatype.org/"
+    if (isSnapshot.value)
+      Some("snapshots" at nexus + "content/repositories/snapshots")
+    else
+      Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+  },
   publishMavenStyle := true,
   publishArtifact in Test := false,
+  pomIncludeRepository := { _ => false },
   resolvers := Seq(
     "scalaz-bintray"    at "http://dl.bintray.com/scalaz/releases",
     "scoverage-bintray" at "https://dl.bintray.com/sksamuel/sbt-plugins/"
@@ -71,3 +78,25 @@ ScalariformKeys.preferences := ScalariformKeys.preferences.value
   .setPreference(IndentSpaces, 2)
   .setPreference(MultilineScaladocCommentsStartOnFirstLine, false)
   .setPreference(SpacesAroundMultiImports, false)
+
+pomExtra := (
+  <url>https://github.com/zalando-incubator/play-zhewbacca</url>
+    <licenses>
+      <license>
+        <name>MIT License</name>
+        <url>https://raw.githubusercontent.com/zalando-incubator/play-zhewbacca/master/LICENSE</url>
+        <distribution>repo</distribution>
+      </license>
+    </licenses>
+    <scm>
+      <url>git@github.com:zalando-incubator/play-zhewbacca.git</url>
+      <connection>scm:git:git@github.com:zalando-incubator/play-zhewbacca.git</connection>
+    </scm>
+    <developers>
+      <developer>
+        <name>Dmitry Krivaltsevich</name>
+      </developer>
+      <developer>
+        <name>William Okuyama</name>
+      </developer>
+    </developers>)
