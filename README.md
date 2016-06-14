@@ -136,7 +136,7 @@ rules = [
         allowed: true
     }
 
-    # 'Catch All' rule for which will immidiately rejects all requests for all other endpoints
+    # 'Catch All' rule will immidiately reject all requests for all other endpoints
     {
         method: GET
         pathRegex: "/.*"
