@@ -1,12 +1,12 @@
 # Play-security library
 
-Play! (v2.5) library to protect REST endpoint by OAuth2 token verification. In order to access to protected endpoint clients should pass an `Authorization` header with `Bearer` token in every request.
-This library implemented in non-blocking way and provides two implementation of token verification.
+Play! (v2.5) library to protect REST endpoint using OAuth2 token verification. In order to access a protected endpoint clients should pass an `Authorization` header with the `Bearer` token in every request.
+This library is implemented in a non-blocking way and provides two implementations of token verification.
 
 - `AlwaysPassAuthProvider` implementation is useful for Development environment to bypass a security mechanism. This implementation assumes that every token is valid.
 - `OAuth2AuthProvider` implementation acquires token information from a 3rd-party endpoint and then verifies this info. Also it applies a [Circuit Breaker](http://doc.akka.io/docs/akka/snapshot/common/circuitbreaker.html) pattern.
 
-Clients of this library don't need to change their code in order to protect endpoints. All necessary security configurations are happening in the separate configuration file.
+Clients of this library don't need to change their code in order to protect endpoints. All necessary security configurations happen in a separate configuration file.
 
 ## Users guide
 
@@ -56,7 +56,6 @@ class ProdModule extends AbstractModule {
 By default no metrics mechanism is used. User can implement ```PlugableMetrics``` to gather some simple metrics.
 See ```org.zalando.zhewbacca.IAMClient``` to learn what can be measured.
 
-
 You need to include `de.zalando.seo.play.security.SecurityFilter` into your applications' filters:
 
 ```scala
@@ -72,8 +71,7 @@ class MyFilters @Inject() (securityFilter: SecurityFilter) extends HttpFilters {
 }
 ```
 
-and then add `play.http.filters = filters.MyFilters` line to your `application.conf`. `SecurityFilter` rejects any requests
-to any endpoint which does not have a corresponding rule in the `security_rules.conf` file.
+and then add `play.http.filters = filters.MyFilters` line to your `application.conf`. `SecurityFilter` rejects any requests to any endpoint which does not have a corresponding rule in the `security_rules.conf` file.
 
 Example of configuration in `application.conf` file:
 
@@ -108,8 +106,7 @@ play.http.filters = filters.MyFilters
 play.modules.enabled += "modules.ProdModule"
 ```
 
-By default this library reads security configuration from the `conf/security_rules.conf` file.
-You can change the file name by specifying a value for the key `authorisation.rules.file` in your `application.conf` file.
+By default this library reads the security configuration from the `conf/security_rules.conf` file. You can change the file name by specifying a value for the key `authorisation.rules.file` in your `application.conf` file.
 
 ```
 # This is an example of production-ready configuration security configuration.
@@ -145,7 +142,7 @@ rules = [
 ]
 ```
 
-Following example demonstrates how you can get an access to the Token Info object inside your controller:
+The following example demonstrates how you can get access to the Token Info object inside your controller:
 
 ```scala
 package controllers
