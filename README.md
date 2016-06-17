@@ -24,12 +24,13 @@ import org.zalando.zhewbacca._
 import org.zalando.zhewbacca.metrics.{NoOpPlugableMetrics, PlugableMetrics}
 
 class DevModule extends AbstractModule {
-
+  val TestTokenInfo = TokenInfo("", Scope.Default, "token type", "user uid")
+  
   override def configure(): Unit = {
     bind(classOf[PlugableMetrics]).to(classOf[NoOpPlugableMetrics])
-    bind(classOf[AuthProvider]).to(classOf[AlwaysPassAuthProvider])
+    bind(classOf[AuthProvider]).toInstance(new AlwaysPassAuthProvider(TestTokenInfo))
   }
-
+  
 }
 ```
 
