@@ -6,7 +6,7 @@ import scalariform.formatter.preferences._
 val commonSettings = Seq(
   organization := "org.zalando",
   version := "0.2",
-  scalaVersion := "2.11.7",
+  scalaVersion := "2.11.8",
   scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8"),
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
@@ -24,7 +24,7 @@ val commonSettings = Seq(
   )
 )
 
-val playFrameworkVersion = "2.5.1"
+val playFrameworkVersion = "2.5.4"
 
 lazy val testDependencies =
   Seq(
