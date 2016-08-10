@@ -5,7 +5,7 @@ import scalariform.formatter.preferences._
 
 val commonSettings = Seq(
   organization := "org.zalando",
-  version := "0.2",
+  version := "0.2.1",
   scalaVersion := "2.11.8",
   scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8"),
   publishTo := {
