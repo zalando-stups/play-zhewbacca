@@ -13,12 +13,14 @@ Clients of this library don't need to change their code in order to protect endp
 Configure libraries dependencies in your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.zalando" % "play-zhewbacca" % "0.1.0"
+libraryDependencies += "org.zalando" %% "play-zhewbacca" % "0.1.0"
 ```
 
 To configure Development environment:
 
 ```scala
+package modules
+
 import com.google.inject.AbstractModule
 import org.zalando.zhewbacca._
 import org.zalando.zhewbacca.metrics.{NoOpPlugableMetrics, PlugableMetrics}
@@ -37,6 +39,8 @@ class DevModule extends AbstractModule {
 For Production environment use:
 
 ```scala
+package modules
+
 import com.google.inject.{ TypeLiteral, AbstractModule }
 import org.zalando.zhewbacca._
 import org.zalando.zhewbacca.metrics.{NoOpPlugableMetrics, PlugableMetrics}
