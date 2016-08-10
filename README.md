@@ -19,6 +19,8 @@ libraryDependencies += "org.zalando" %% "play-zhewbacca" % "0.1.0"
 To configure Development environment:
 
 ```scala
+package modules
+
 import com.google.inject.AbstractModule
 import org.zalando.zhewbacca._
 import org.zalando.zhewbacca.metrics.{NoOpPlugableMetrics, PlugableMetrics}
@@ -37,6 +39,8 @@ class DevModule extends AbstractModule {
 For Production environment use:
 
 ```scala
+package modules
+
 import com.google.inject.{ TypeLiteral, AbstractModule }
 import org.zalando.zhewbacca._
 import org.zalando.zhewbacca.metrics.{NoOpPlugableMetrics, PlugableMetrics}
