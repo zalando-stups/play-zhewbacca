@@ -13,7 +13,7 @@ Clients of this library don't need to change their code in order to protect endp
 Configure libraries dependencies in your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.zalando" % "play-zhewbacca" % "0.1.0"
+libraryDependencies += "org.zalando" %% "play-zhewbacca" % "0.1.0"
 ```
 
 To configure Development environment:
