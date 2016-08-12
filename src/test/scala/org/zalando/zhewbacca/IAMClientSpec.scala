@@ -185,6 +185,6 @@ class IAMClientSpec extends Specification {
       "metrics.name" -> java.util.UUID.randomUUID.toString
     ))
 
-    new IAMClient(clientConfig, new NoOpPlugableMetrics, client, actorSystem, ExecutionContext.Implicits.global)
+    new IAMClient(clientConfig, new NoOpPlugableMetrics, client, actorSystem)(ExecutionContext.Implicits.global)
   }
 }

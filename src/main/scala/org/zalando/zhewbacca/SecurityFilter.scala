@@ -19,8 +19,10 @@ import scala.concurrent.{ExecutionContext, Future}
   * @param ec an ExecutionContext for rules
   */
 class SecurityFilter @Inject() (
-    rulesRepository: SecurityRulesRepository,
-    implicit val mat: Materializer,
+    rulesRepository: SecurityRulesRepository
+)(
+    implicit
+    val mat: Materializer,
     implicit val ec: ExecutionContext
 ) extends Filter {
 
