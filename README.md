@@ -154,8 +154,8 @@ package controllers
 
 import javax.inject.Inject
 
-import de.zalando.seo.play.security.TokenInfoConverter._
-import de.zalando.seo.play.security.TokenInfo
+import org.zalando.zhewbacca.TokenInfoConverter._
+import org.zalando.zhewbacca.TokenInfo
 
 class SeoDescriptionController @Inject() extends Controller {
 
