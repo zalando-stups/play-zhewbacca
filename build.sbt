@@ -24,7 +24,7 @@ val commonSettings = Seq(
   )
 )
 
-val playFrameworkVersion = "2.5.4"
+val playFrameworkVersion = "2.5.9"
 
 lazy val testDependencies =
   Seq(
@@ -45,7 +45,7 @@ lazy val playDependencies =
 lazy val root = (project in file("."))
   .settings(commonSettings: _*)
   .settings(name := "play-Zhewbacca")
-  .settings(version := "0.1.0")
+  .settings(version := "0.2.1")
   .settings(libraryDependencies ++= (testDependencies ++ playDependencies))
   .settings(parallelExecution in Test := false)
 
