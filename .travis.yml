@@ -19,6 +19,3 @@ notifications:
     email:
         - dmitry.krivaltsevich@zalando.de
         - cezary.lada.extern@zalando.de
-
-env:
-- COVERALLS_TOKEN=token
