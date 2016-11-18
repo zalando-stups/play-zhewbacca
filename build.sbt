@@ -34,19 +34,23 @@ lazy val testDependencies =
 
 lazy val playDependencies =
   Seq(
-    "com.typesafe.play" %% "play-json" % playFrameworkVersion,
-    "com.typesafe.play" %% "play-ws" % playFrameworkVersion,
-    "com.typesafe.play" %% "play" % playFrameworkVersion,
-    "com.typesafe.play" %% "play-test" % playFrameworkVersion % "test",
-    "com.typesafe.play" %% "play-specs2" % playFrameworkVersion % "test"
+    "com.typesafe.play" %% "play-json"    % playFrameworkVersion,
+    "com.typesafe.play" %% "play-ws"      % playFrameworkVersion,
+    "com.typesafe.play" %% "play"         % playFrameworkVersion,
+    "com.typesafe.play" %% "play-test"    % playFrameworkVersion % "test",
+    "com.typesafe.play" %% "play-specs2"  % playFrameworkVersion % "test"
   )
 
+lazy val libraries =
+  Seq(
+    "io.zman" %% "atmos" % "2.1"
+  )
 
 lazy val root = (project in file("."))
   .settings(commonSettings: _*)
   .settings(name := "play-Zhewbacca")
   .settings(version := "0.2.1")
-  .settings(libraryDependencies ++= (testDependencies ++ playDependencies))
+  .settings(libraryDependencies ++= (testDependencies ++ playDependencies ++ libraries))
   .settings(parallelExecution in Test := false)
 
 // Define a special task which does not fail when any publish task fails for any module,
