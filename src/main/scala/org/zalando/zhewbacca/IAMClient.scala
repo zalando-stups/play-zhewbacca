@@ -14,6 +14,9 @@ import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
+import atmos.dsl._
+import atmos.dsl.Slf4jSupport._
+
 /**
   * Retrieves TokenInfo for given OAuth2 token using IAM API.
   *
@@ -72,7 +75,11 @@ class IAMClient @Inject() (
 
   override def apply(token: OAuth2Token): Future[Option[TokenInfo]] = {
     breaker.withCircuitBreaker(
-      plugableMetrics.timing(ws.url(authEndpoint).withQueryString(("access_token", token.value)).get())
+      plugableMetrics.timing(
+        retryAsync(s"Calling $authEndpoint") {
+          ws.url(authEndpoint).withQueryString(("access_token", token.value)).get()
+        }
+      )
     ).map { response =>
         response.status match {
           case OK => Some(response.json.as[TokenInfo])
@@ -83,6 +90,12 @@ class IAMClient @Inject() (
           logger.error(s"Exception occurred during validation of token '${token.toSafeString}': $e")
           None // consider any exception as invalid token
       }
+  }
+
+  implicit val retryRecover = retryFor { 3.attempts } using {
+    exponentialBackoff { 100.millis }
+  } monitorWith {
+    logger.logger onRetrying logNothing onInterrupted logWarning onAborted logError
   }
 
 }
