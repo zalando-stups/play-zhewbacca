@@ -99,4 +99,7 @@ pomExtra := (
       <developer>
         <name>William Okuyama</name>
       </developer>
+      <developer>
+        <name>Raymond Chenon</name>
+      </developer>
     </developers>)
