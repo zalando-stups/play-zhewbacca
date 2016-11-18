@@ -1,5 +1,8 @@
 # Play-security library
 
+![Build Status - Master](https://travis-ci.org/zalando-incubator/play-zhewbacca.svg?branch=master)
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/zalando-incubator/play-zhewbacca/master/LICENSE)
+
 Play! (v2.5) library to protect REST endpoint using OAuth2 token verification. In order to access a protected endpoint clients should pass an `Authorization` header with the `Bearer` token in every request.
 This library is implemented in a non-blocking way and provides two implementations of token verification.
 
