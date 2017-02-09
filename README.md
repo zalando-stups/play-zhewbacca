@@ -66,7 +66,7 @@ class ProdModule extends AbstractModule {
 By default no metrics mechanism is used. User can implement ```PlugableMetrics``` to gather some simple metrics.
 See ```org.zalando.zhewbacca.IAMClient``` to learn what can be measured.
 
-You need to include `de.zalando.seo.play.security.SecurityFilter` into your applications' filters:
+You need to include `org.zalando.zhewbacca.SecurityFilter` into your applications' filters:
 
 ```scala
 package filters
