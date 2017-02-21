@@ -5,7 +5,7 @@ import scalariform.formatter.preferences._
 
 val commonSettings = Seq(
   organization := "org.zalando",
-  version := "0.2.1.1",
+  version := "0.2.2",
   scalaVersion := "2.11.8",
   scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8"),
   publishTo := {
@@ -49,7 +49,7 @@ lazy val libraries =
 lazy val root = (project in file("."))
   .settings(commonSettings: _*)
   .settings(name := "play-Zhewbacca")
-  .settings(version := "0.2.1.1")
+  .settings(version := "0.2.2")
   .settings(libraryDependencies ++= (testDependencies ++ playDependencies ++ libraries))
   .settings(parallelExecution in Test := false)
 
