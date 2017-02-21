@@ -92,10 +92,10 @@ authorisation.iam.endpoint = "https://info.services.auth.zalando.com/oauth2/toke
 # Maximum number of failures before opening the circuit
 authorisation.iam.cb.maxFailures = 4
 
-# Duration of time in milliseconds after which to consider a call a failure
+# Duration in milliseconds after which to consider a call a failure
 authorisation.iam.cb.callTimeout = 2000
 
-# Duration of time in milliseconds after which to attempt to close the circuit
+# Duration in milliseconds after which to attempt to close the circuit
 authorisation.iam.cb.resetTimeout = 60000
 
 # Maximum number of retries
