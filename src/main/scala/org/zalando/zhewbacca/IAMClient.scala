@@ -30,8 +30,10 @@ class IAMClient @Inject() (
     config: Configuration,
     plugableMetrics: PlugableMetrics,
     ws: WSClient,
-    actorSystem: ActorSystem,
-    implicit val ec: ExecutionContext
+    actorSystem: ActorSystem
+)(
+    implicit
+    val ec: ExecutionContext
 ) extends ((OAuth2Token) => Future[Option[TokenInfo]]) {
 
   val logger: Logger = Logger("security.IAMClient")
