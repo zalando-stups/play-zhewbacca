@@ -98,6 +98,12 @@ authorisation.iam.cb.callTimeout = 2000
 # Duration of time in milliseconds after which to attempt to close the circuit
 authorisation.iam.cb.resetTimeout = 60000
 
+# Maximum number of retries
+authorisation.iam.maxRetries = 3
+
+# Duration in milliseconds of the exponential backoff
+authorisation.iam.retry.backoff.duration = 100
+
 # IAMClient depends on Play internal WS client so it also has to be configured.
 # The maximum time to wait when connecting to the remote host.
 # Play's default is 120 seconds

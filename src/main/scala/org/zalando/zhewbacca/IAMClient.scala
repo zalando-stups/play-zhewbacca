@@ -60,6 +60,14 @@ class IAMClient @Inject() (
     throw new IllegalArgumentException("Authorisation: Circuit Breaker reset timeout is not configured")
   ).millis
 
+  val breakerMaxRetries = config.getInt("authorisation.iam.maxRetries").getOrElse(
+    throw new IllegalArgumentException("Authorisation: Circuit Breaker max retries is not configured")
+  ).attempts
+
+  val breakerRetryBackoff = config.getInt("authorisation.iam.retry.backoff.duration").getOrElse(
+    throw new IllegalArgumentException("Authorisation: Circuit Breaker the duration of exponential backoff is not configured")
+  ).millis
+
   lazy val breaker: CircuitBreaker = new CircuitBreaker(
     actorSystem.scheduler,
     breakerMaxFailures,
@@ -92,8 +100,8 @@ class IAMClient @Inject() (
       }
   }
 
-  implicit val retryRecover = retryFor { 3.attempts } using {
-    exponentialBackoff { 100.millis }
+  implicit val retryRecover = retryFor { breakerMaxRetries } using {
+    exponentialBackoff { breakerRetryBackoff }
   } monitorWith {
     logger.logger onRetrying logNothing onInterrupted logWarning onAborted logError
   }
