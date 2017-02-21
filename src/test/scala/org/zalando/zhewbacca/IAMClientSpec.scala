@@ -175,6 +175,8 @@ class IAMClientSpec extends Specification {
       "authorisation.iam.cb.maxFailures" -> 4,
       "authorisation.iam.cb.callTimeout" -> 2000,
       "authorisation.iam.cb.resetTimeout" -> 60000,
+      "authorisation.iam.maxRetries" -> 3,
+      "authorisation.iam.retry.backoff.duration" -> 100,
       "play.ws.timeout.connection" -> 2000,
       "play.ws.timeout.idle" -> 2000,
       "play.ws.timeout.request" -> 2000

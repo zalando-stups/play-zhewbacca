@@ -18,7 +18,7 @@ Clients of this library don't need to change their code in order to protect endp
 Configure libraries dependencies in your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.zalando" %% "play-zhewbacca" % "0.2.1"
+libraryDependencies += "org.zalando" %% "play-zhewbacca" % "0.2.2"
 ```
 
 To configure Development environment:
@@ -92,11 +92,17 @@ authorisation.iam.endpoint = "https://info.services.auth.zalando.com/oauth2/toke
 # Maximum number of failures before opening the circuit
 authorisation.iam.cb.maxFailures = 4
 
-# Duration of time in milliseconds after which to consider a call a failure
+# Duration in milliseconds after which to consider a call a failure
 authorisation.iam.cb.callTimeout = 2000
 
-# Duration of time in milliseconds after which to attempt to close the circuit
+# Duration in milliseconds after which to attempt to close the circuit
 authorisation.iam.cb.resetTimeout = 60000
+
+# Maximum number of retries
+authorisation.iam.maxRetries = 3
+
+# Duration in milliseconds of the exponential backoff
+authorisation.iam.retry.backoff.duration = 100
 
 # IAMClient depends on Play internal WS client so it also has to be configured.
 # The maximum time to wait when connecting to the remote host.
