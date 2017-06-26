@@ -11,9 +11,21 @@ This library is implemented in a non-blocking way and provides two implementatio
 - `AlwaysPassAuthProvider` implementation is useful for Development environment to bypass a security mechanism. This implementation assumes that every token is valid.
 - `OAuth2AuthProvider` implementation acquires token information from a 3rd-party endpoint and then verifies this info. Also it applies a [Circuit Breaker](http://doc.akka.io/docs/akka/snapshot/common/circuitbreaker.html) pattern.
 
-Clients of this library don't need to change their code in order to protect endpoints. All necessary security configurations happen in a separate configuration file.
+Clients of this library don't need to change their code in order to protect endpoints. All necessary security configurations happen in a separate configuration file. The main difference between this library and similar libraries is that as a user of this library you don't need to change your code or somehow couple it any custom annotations or "actions". This library also provides you kind of a safety net because the access to all endpoints regardless of whether they are existing or planned is denied by default.
 
-## Users guide
+The library is used in production in several projects, so you may consider it as reliable and stable.
+
+## Core Technical Concepts
+- Non-intrusive approach for the integration with existing play applications. You don't need to change your code.
+- Declarative security configuration via configuration file.
+- Minimalistic. The library does only one thing, but does it good.
+- Developers friendly. Just plug it in and you are done.
+- Non-blocking from top to bottom.
+- Opinionated design choice: the library relies on `Play`'s toolbox like `WS`-client from the beginning because it is designed to work _exclusively_ within Play-applications.
+
+We mainly decided to release this library because we saw the needs of OAuth2 protection in almost every microservice we built and because we are not happy to couple our code with any forms of custom security actions or annotations.
+
+## Getting Started
 
 Configure libraries dependencies in your `build.sbt`:
 
@@ -177,3 +189,32 @@ class SeoDescriptionController @Inject() extends Controller {
 }
 
 ```
+
+## Contributing
+Your contributions are highly welcome! To start please read the [Contributing Guideline](CONTRIBUTING.md).
+
+## Contact
+Please drop us an email in case of any doubts. The actual list of maintainers with email addresses you can find in the [MAINTAINERS](MAINTAINERS) file.
+
+## License
+The MIT License (MIT)
+
+Copyright (c) 2015 Zalando SE
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
