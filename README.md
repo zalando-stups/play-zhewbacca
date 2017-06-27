@@ -3,6 +3,7 @@
 ![Build Status - Master](https://travis-ci.org/zalando-incubator/play-zhewbacca.svg?branch=master)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.zalando/play-zhewbacca_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.zalando/play-zhewbacca_2.11)
 [![codecov.io](https://codecov.io/github/zalando-incubator/play-zhewbacca/coverage.svg?branch=master)](https://codecov.io/github/zalando-incubator/play-zhewbacca?branch=master)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/fa1fb822bc1246508d343880c0b1868c)](https://www.codacy.com/app/dmitrykrivaltsevich/play-zhewbacca?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zalando-incubator/play-zhewbacca&amp;utm_campaign=Badge_Grade)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/zalando-incubator/play-zhewbacca/master/LICENSE)
 
 Play! (v2.5) library to protect REST endpoint using OAuth2 token verification. In order to access a protected endpoint clients should pass an `Authorization` header with the `Bearer` token in every request.
