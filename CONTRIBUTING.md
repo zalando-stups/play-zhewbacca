@@ -35,7 +35,7 @@ This is a rough outline of what the workflow for code contributions looks like:
 Thanks for your contributions!
 
 ### Code style
-The code will be automatically formatted every time when you make a build (`sbt clean compile`). Please run it on your code before making a pull request. The local build may fail with a message descriptive message in case of violations of our style guideline.
+The code will be automatically formatted every time when you make a build (`sbt clean compile`). Please run it locally  before making a pull request. The local build may fail with a descriptive message in case of violations of our style guideline.
 
 ### Commit messages
 Your commit messages ideally can answer two questions: what changed and why. The subject line should feature the “what” and the body of the commit should describe the “why”.  
