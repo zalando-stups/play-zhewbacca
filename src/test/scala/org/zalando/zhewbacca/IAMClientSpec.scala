@@ -6,7 +6,7 @@ import org.zalando.zhewbacca.metrics.NoOpPlugableMetrics
 import play.api.http.{DefaultFileMimeTypes, FileMimeTypesConfiguration, Port}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.WSClient
-import play.api.mvc.{Action, Handler, Result, Results}
+import play.api.mvc._
 import play.api.test.WsTestClient
 import play.api.{Application, Configuration, Mode}
 import play.core.server.Server

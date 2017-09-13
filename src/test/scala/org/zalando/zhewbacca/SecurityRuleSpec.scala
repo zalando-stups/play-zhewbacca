@@ -2,10 +2,11 @@ package org.zalando.zhewbacca
 
 import org.specs2.mock.Mockito
 import org.specs2.mutable.Specification
+import play.api.http.Status.FORBIDDEN
+import play.api.libs.typedmap.TypedKey
 import play.api.mvc.{RequestHeader, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.api.http.Status.FORBIDDEN
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -59,9 +60,10 @@ class SecurityRuleSpec extends Specification with Mockito {
 
   "ExplicitlyAllowedRule" should {
     "pass unmodified request to next filter" in { implicit ec: ExecutionContext =>
-      val originalRequest = FakeRequest("GET", "/foo").withTag("testTag", "testValue")
+      val testAttribute: TypedKey[String] = TypedKey("testAttribute")
+      val originalRequest = FakeRequest("GET", "/foo").addAttr(testAttribute, "testValue")
       val rule = new ExplicitlyAllowedRule("GET", "/foo")
-      val nextFilter = { request: RequestHeader => Future.successful(Results.Ok(request.tags("testTag"))) }
+      val nextFilter = { request: RequestHeader => Future.successful(Results.Ok(request.attrs(testAttribute))) }
 
       contentAsString(rule.execute(nextFilter, originalRequest)) must beEqualTo("testValue")
     }
