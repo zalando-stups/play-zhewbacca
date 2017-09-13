@@ -3,7 +3,7 @@ package org.zalando.zhewbacca
 import akka.actor.ActorSystem
 import org.specs2.mutable.Specification
 import org.zalando.zhewbacca.metrics.NoOpPlugableMetrics
-import play.api.http.Port
+import play.api.http.{DefaultFileMimeTypes, FileMimeTypesConfiguration, Port}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.WSClient
 import play.api.mvc.{Action, Handler, Result, Results}
@@ -14,9 +14,11 @@ import play.core.server.Server
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext}
 
-// @see https://www.playframework.com/documentation/2.5.x/ScalaTestingWebServiceClients
+// @see https://www.playframework.com/documentation/2.6.x/ScalaTestingWebServiceClients
 class IAMClientSpec extends Specification {
   sequential
+
+  implicit val mimeTypes = new DefaultFileMimeTypes(new FileMimeTypesConfiguration())
 
   "IAM Client" should {
 
@@ -32,8 +34,7 @@ class IAMClientSpec extends Specification {
             "311f3ab2-4116-45a0-8bb0-50c3bca0441d",
             Scope(Set("uid")),
             "Bearer",
-            userUid = "user uid"
-          )))
+            userUid = "user uid")))
 
         }
       }
@@ -51,8 +52,7 @@ class IAMClientSpec extends Specification {
             "311f3ab2-4116-45a0-8bb0-50c3bca0441d",
             Scope(Set("uid")),
             "Bearer",
-            userUid = "user uid"
-          )))
+            userUid = "user uid")))
 
         }
       }
@@ -101,7 +101,7 @@ class IAMClientSpec extends Specification {
     }
 
     "should not return a Token Info when remote server operates slow" in {
-      val app: Application = fakeApp(delay = 15.minutes)
+      val app: Application = fakeApp(delay = 5.seconds)
       Server.withApplication(application = app) { port =>
         WsTestClient.withClient { client =>
 
@@ -134,7 +134,7 @@ class IAMClientSpec extends Specification {
     }
 
     "stop calling remote server when failed requests rate exceed a threshold" in {
-      val app: Application = fakeApp(delay = 15.minutes)
+      val app: Application = fakeApp(delay = 5.seconds)
       Server.withApplication(application = app) { port =>
         WsTestClient.withClient { wsClient =>
 
@@ -179,13 +179,11 @@ class IAMClientSpec extends Specification {
       "authorisation.iam.retry.backoff.duration" -> 100,
       "play.ws.timeout.connection" -> 2000,
       "play.ws.timeout.idle" -> 2000,
-      "play.ws.timeout.request" -> 2000
-    ) ++ additionalConfig)
+      "play.ws.timeout.request" -> 2000) ++ additionalConfig)
 
     val metricsConfig = Configuration.from(Map(
       // generate new name each time so different registries are used
-      "metrics.name" -> java.util.UUID.randomUUID.toString
-    ))
+      "metrics.name" -> java.util.UUID.randomUUID.toString))
 
     new IAMClient(clientConfig, new NoOpPlugableMetrics, client, actorSystem, ExecutionContext.Implicits.global)
   }
