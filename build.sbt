@@ -6,44 +6,47 @@ import scalariform.formatter.preferences._
 val commonSettings = Seq(
   organization := "org.zalando",
   version := "0.2.2",
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.12.3",
   scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8"),
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
-    if (isSnapshot.value)
+    if (isSnapshot.value) {
       Some("snapshots" at nexus + "content/repositories/snapshots")
-    else
-      Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+    }
+    else {
+      Some("releases" at nexus + "service/local/staging/deploy/maven2")
+    }
   },
   publishMavenStyle := true,
   publishArtifact in Test := false,
   pomIncludeRepository := { _ => false },
   resolvers := Seq(
-    "scalaz-bintray"    at "http://dl.bintray.com/scalaz/releases",
+    "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases",
     "scoverage-bintray" at "https://dl.bintray.com/sksamuel/sbt-plugins/"
   )
 )
 
-val playFrameworkVersion = "2.5.9"
+val playFrameworkVersion = "2.6.3"
 
 lazy val testDependencies =
   Seq(
-    "org.specs2" %% "specs2-core" % "3.6.4" % "test",
-    "org.specs2" %% "specs2-junit" % "3.6.4" % "test"
+    "org.specs2" %% "specs2-core" % "3.9.5" % "test",
+    "org.specs2" %% "specs2-junit" % "3.9.5" % "test"
   )
 
 lazy val playDependencies =
   Seq(
-    "com.typesafe.play" %% "play-json"    % playFrameworkVersion,
-    "com.typesafe.play" %% "play-ws"      % playFrameworkVersion,
-    "com.typesafe.play" %% "play"         % playFrameworkVersion,
-    "com.typesafe.play" %% "play-test"    % playFrameworkVersion % "test",
-    "com.typesafe.play" %% "play-specs2"  % playFrameworkVersion % "test"
+    "com.typesafe.play" %% "play-ahc-ws" % playFrameworkVersion,
+    "com.typesafe.play" %% "play-json" % playFrameworkVersion,
+    "com.typesafe.play" %% "play-ws" % playFrameworkVersion,
+    "com.typesafe.play" %% "play" % playFrameworkVersion,
+    "com.typesafe.play" %% "play-test" % playFrameworkVersion % "test",
+    "com.typesafe.play" %% "play-specs2" % playFrameworkVersion % "test"
   )
 
 lazy val libraries =
   Seq(
-    "io.zman" %% "atmos" % "2.1"
+    "io.paradoxical" %% "atmos" % "2.2"
   )
 
 lazy val root = (project in file("."))
@@ -65,14 +68,14 @@ scalastyleFailOnError := true
 // Create a default Scala style task to run with tests
 lazy val compileScalastyle = taskKey[Unit]("compileScalastyle")
 
-compileScalastyle := org.scalastyle.sbt.ScalastylePlugin.scalastyle.in(Compile).toTask("").value
+compileScalastyle := scalastyle.in(Compile).toTask("").value
 
 (compileInputs in(Compile, compile)) <<= (compileInputs in(Compile, compile)) dependsOn compileScalastyle
 
-scalariformSettings
+scalariformSettings(autoformat = true)
 
 ScalariformKeys.preferences := ScalariformKeys.preferences.value
-  .setPreference(DoubleIndentClassDeclaration, true)
+  .setPreference(DoubleIndentConstructorArguments, true)
   .setPreference(PlaceScaladocAsterisksBeneathSecondAsterisk, true)
   .setPreference(PreserveSpaceBeforeArguments, false)
   .setPreference(AlignSingleLineCaseStatements, false)
