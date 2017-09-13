@@ -13,8 +13,7 @@ class OAuth2AuthProviderSpec extends Specification {
       val tokenInfo = TokenInfo("311f3ab2-4116-45a0-8bb0-50c3bca0441d", Scope(Set("uid")), "Bearer", userUid = "1234")
       val request = new OAuth2AuthProvider((token: OAuth2Token) => Future.successful(Some(tokenInfo))).valid(
         Some(OAuth2Token("311f3ab2-4116-45a0-8bb0-50c3bca0441d")),
-        Scope(Set("uid"))
-      )
+        Scope(Set("uid")))
 
       Await.result(request, 1.second) must beEqualTo(AuthTokenValid(tokenInfo))
     }
@@ -23,8 +22,7 @@ class OAuth2AuthProviderSpec extends Specification {
       val tokenInfo = TokenInfo("311f3ab2-4116-45a0-8bb0-50c3bca0441d", Scope(Set("uid", "cn")), "Bearer", userUid = "1234")
       val request = new OAuth2AuthProvider((token: OAuth2Token) => Future.successful(Some(tokenInfo))).valid(
         Some(OAuth2Token("311f3ab2-4116-45a0-8bb0-50c3bca0441d")),
-        Scope(Set("uid"))
-      )
+        Scope(Set("uid")))
 
       Await.result(request, 1.second) must beEqualTo(AuthTokenValid(tokenInfo))
     }
@@ -32,8 +30,7 @@ class OAuth2AuthProviderSpec extends Specification {
     "reject token when IAM reports it is not valid one" in {
       val request = new OAuth2AuthProvider((token: OAuth2Token) => Future.successful(None)).valid(
         Some(OAuth2Token("311f3ab2-4116-45a0-8bb0-50c3bca0441d")),
-        Scope(Set("uid"))
-      )
+        Scope(Set("uid")))
 
       Await.result(request, 1.second) must beEqualTo(AuthTokenInvalid)
     }
@@ -42,8 +39,7 @@ class OAuth2AuthProviderSpec extends Specification {
       val tokenInfo = TokenInfo("986c2946-c754-4e58-a0cb-7e86e3e9901b", Scope(Set("uid")), "Bearer", userUid = "1234")
       val request = new OAuth2AuthProvider((token: OAuth2Token) => Future.successful(Some(tokenInfo))).valid(
         Some(OAuth2Token("311f3ab2-4116-45a0-8bb0-50c3bca0441d")),
-        Scope(Set("uid"))
-      )
+        Scope(Set("uid")))
 
       Await.result(request, 1.second) must beEqualTo(AuthTokenInvalid)
     }
@@ -52,8 +48,7 @@ class OAuth2AuthProviderSpec extends Specification {
       val tokenInfo = TokenInfo("311f3ab2-4116-45a0-8bb0-50c3bca0441d", Scope(Set("uid")), "Bearer", userUid = "1234")
       val request = new OAuth2AuthProvider((token: OAuth2Token) => Future.successful(Some(tokenInfo))).valid(
         Some(OAuth2Token("311f3ab2-4116-45a0-8bb0-50c3bca0441d")),
-        Scope(Set("uid", "seo_description.write"))
-      )
+        Scope(Set("uid", "seo_description.write")))
 
       Await.result(request, 1.second) must beEqualTo(AuthTokenInvalid)
     }
@@ -62,8 +57,7 @@ class OAuth2AuthProviderSpec extends Specification {
       val tokenInfo = TokenInfo("311f3ab2-4116-45a0-8bb0-50c3bca0441d", Scope(Set("uid")), "Token", userUid = "1234")
       val request = new OAuth2AuthProvider((token: OAuth2Token) => Future.successful(Some(tokenInfo))).valid(
         Some(OAuth2Token("311f3ab2-4116-45a0-8bb0-50c3bca0441d")),
-        Scope(Set("uid"))
-      )
+        Scope(Set("uid")))
 
       Await.result(request, 1.second) must beEqualTo(AuthTokenInvalid)
     }
@@ -71,8 +65,7 @@ class OAuth2AuthProviderSpec extends Specification {
     "reject empty token" in {
       val request = new OAuth2AuthProvider((token: OAuth2Token) => Future.successful(None)).valid(
         None,
-        Scope(Set("uid"))
-      )
+        Scope(Set("uid")))
 
       Await.result(request, 1.second) must beEqualTo(AuthTokenEmpty)
     }

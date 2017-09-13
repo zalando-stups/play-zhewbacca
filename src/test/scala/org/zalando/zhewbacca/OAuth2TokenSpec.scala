@@ -15,8 +15,7 @@ class OAuth2TokenSpec extends Specification {
     "be extracted only from first 'Authorization' request header" in {
       val request = FakeRequest().withHeaders(
         "Authorization" -> "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==",
-        "Authorization" -> "Bearer 78d6c4c9-b777-4524-9c59-dbf55a3f8ad1"
-      )
+        "Authorization" -> "Bearer 78d6c4c9-b777-4524-9c59-dbf55a3f8ad1")
 
       OAuth2Token.from(request) must be equalTo None
     }

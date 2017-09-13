@@ -21,8 +21,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class SecurityFilter @Inject() (
     rulesRepository: SecurityRulesRepository,
     implicit val mat: Materializer,
-    implicit val ec: ExecutionContext
-) extends Filter {
+    implicit val ec: ExecutionContext) extends Filter {
 
   override def apply(nextFilter: (RequestHeader) => Future[Result])(requestHeader: RequestHeader): Future[Result] = {
     rulesRepository.get(requestHeader).getOrElse {

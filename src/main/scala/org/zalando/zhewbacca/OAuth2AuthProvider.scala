@@ -12,7 +12,7 @@ import scala.concurrent.Future
   */
 @Singleton
 class OAuth2AuthProvider @Inject() (getTokenInfo: (OAuth2Token) => Future[Option[TokenInfo]])
-    extends AuthProvider {
+  extends AuthProvider {
 
   val logger: Logger = Logger("security.OAuth2AuthProvider")
 
