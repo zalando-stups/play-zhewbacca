@@ -31,8 +31,7 @@ class IAMClient @Inject() (
     plugableMetrics: PlugableMetrics,
     ws: WSClient,
     actorSystem: ActorSystem,
-    implicit val ec: ExecutionContext
-) extends ((OAuth2Token) => Future[Option[TokenInfo]]) {
+    implicit val ec: ExecutionContext) extends ((OAuth2Token) => Future[Option[TokenInfo]]) {
 
   val logger: Logger = Logger("security.IAMClient")
 
@@ -45,35 +44,28 @@ class IAMClient @Inject() (
   }
 
   val authEndpoint = config.getString("authorisation.iam.endpoint").getOrElse(
-    throw new IllegalArgumentException("Authorisation: IAM endpoint is not configured")
-  )
+    throw new IllegalArgumentException("Authorisation: IAM endpoint is not configured"))
 
   val breakerMaxFailures = config.getInt("authorisation.iam.cb.maxFailures").getOrElse(
-    throw new IllegalArgumentException("Authorisation: Circuit Breaker max failures is not configured")
-  )
+    throw new IllegalArgumentException("Authorisation: Circuit Breaker max failures is not configured"))
 
   val breakerCallTimeout = config.getInt("authorisation.iam.cb.callTimeout").getOrElse(
-    throw new IllegalArgumentException("Authorisation: Circuit Breaker call timeout is not configured")
-  ).millis
+    throw new IllegalArgumentException("Authorisation: Circuit Breaker call timeout is not configured")).millis
 
   val breakerResetTimeout = config.getInt("authorisation.iam.cb.resetTimeout").getOrElse(
-    throw new IllegalArgumentException("Authorisation: Circuit Breaker reset timeout is not configured")
-  ).millis
+    throw new IllegalArgumentException("Authorisation: Circuit Breaker reset timeout is not configured")).millis
 
   val breakerMaxRetries = config.getInt("authorisation.iam.maxRetries").getOrElse(
-    throw new IllegalArgumentException("Authorisation: Circuit Breaker max retries is not configured")
-  ).attempts
+    throw new IllegalArgumentException("Authorisation: Circuit Breaker max retries is not configured")).attempts
 
   val breakerRetryBackoff = config.getInt("authorisation.iam.retry.backoff.duration").getOrElse(
-    throw new IllegalArgumentException("Authorisation: Circuit Breaker the duration of exponential backoff is not configured")
-  ).millis
+    throw new IllegalArgumentException("Authorisation: Circuit Breaker the duration of exponential backoff is not configured")).millis
 
   lazy val breaker: CircuitBreaker = new CircuitBreaker(
     actorSystem.scheduler,
     breakerMaxFailures,
     breakerCallTimeout,
-    breakerResetTimeout
-  ).onHalfOpen {
+    breakerResetTimeout).onHalfOpen {
     circuitStatus.set(METRICS_BREAKER_OPEN)
   }.onOpen {
     circuitStatus.set(METRICS_BREAKER_OPEN)
@@ -81,14 +73,18 @@ class IAMClient @Inject() (
     circuitStatus.set(METRICS_BREAKER_CLOSED)
   }
 
+  implicit val retryRecover = retryFor { breakerMaxRetries } using {
+    exponentialBackoff { breakerRetryBackoff }
+  } monitorWith {
+    logger.logger onRetrying logNothing onInterrupted logWarning onAborted logError
+  }
+
   override def apply(token: OAuth2Token): Future[Option[TokenInfo]] = {
     breaker.withCircuitBreaker(
       plugableMetrics.timing(
         retryAsync(s"Calling $authEndpoint") {
           ws.url(authEndpoint).withQueryString(("access_token", token.value)).get()
-        }
-      )
-    ).map { response =>
+        })).map { response =>
         response.status match {
           case OK => Some(response.json.as[TokenInfo])
           case _ => None
@@ -98,12 +94,6 @@ class IAMClient @Inject() (
           logger.error(s"Exception occurred during validation of token '${token.toSafeString}': $e")
           None // consider any exception as invalid token
       }
-  }
-
-  implicit val retryRecover = retryFor { breakerMaxRetries } using {
-    exponentialBackoff { breakerRetryBackoff }
-  } monitorWith {
-    logger.logger onRetrying logNothing onInterrupted logWarning onAborted logError
   }
 
 }
