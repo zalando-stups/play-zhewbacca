@@ -5,8 +5,8 @@ import scalariform.formatter.preferences._
 
 val commonSettings = Seq(
   organization := "org.zalando",
-  version := "0.2",
-  scalaVersion := "2.11.7",
+  version := "0.2.2",
+  scalaVersion := "2.11.8",
   scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8"),
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
@@ -24,7 +24,7 @@ val commonSettings = Seq(
   )
 )
 
-val playFrameworkVersion = "2.5.1"
+val playFrameworkVersion = "2.5.9"
 
 lazy val testDependencies =
   Seq(
@@ -34,19 +34,23 @@ lazy val testDependencies =
 
 lazy val playDependencies =
   Seq(
-    "com.typesafe.play" %% "play-json" % playFrameworkVersion,
-    "com.typesafe.play" %% "play-ws" % playFrameworkVersion,
-    "com.typesafe.play" %% "play" % playFrameworkVersion,
-    "com.typesafe.play" %% "play-test" % playFrameworkVersion % "test",
-    "com.typesafe.play" %% "play-specs2" % playFrameworkVersion % "test"
+    "com.typesafe.play" %% "play-json"    % playFrameworkVersion,
+    "com.typesafe.play" %% "play-ws"      % playFrameworkVersion,
+    "com.typesafe.play" %% "play"         % playFrameworkVersion,
+    "com.typesafe.play" %% "play-test"    % playFrameworkVersion % "test",
+    "com.typesafe.play" %% "play-specs2"  % playFrameworkVersion % "test"
   )
 
+lazy val libraries =
+  Seq(
+    "io.zman" %% "atmos" % "2.1"
+  )
 
 lazy val root = (project in file("."))
   .settings(commonSettings: _*)
   .settings(name := "play-Zhewbacca")
-  .settings(version := "0.1.0")
-  .settings(libraryDependencies ++= (testDependencies ++ playDependencies))
+  .settings(version := "0.2.2")
+  .settings(libraryDependencies ++= (testDependencies ++ playDependencies ++ libraries))
   .settings(parallelExecution in Test := false)
 
 // Define a special task which does not fail when any publish task fails for any module,
@@ -98,5 +102,8 @@ pomExtra := (
       </developer>
       <developer>
         <name>William Okuyama</name>
+      </developer>
+      <developer>
+        <name>Raymond Chenon</name>
       </developer>
     </developers>)
