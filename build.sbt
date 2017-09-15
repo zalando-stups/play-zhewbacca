@@ -26,7 +26,7 @@ val commonSettings = Seq(
   )
 )
 
-val playFrameworkVersion = "2.6.3"
+val playFrameworkVersion = "2.6.5"
 
 lazy val testDependencies =
   Seq(
