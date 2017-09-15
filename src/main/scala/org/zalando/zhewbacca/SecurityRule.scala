@@ -27,15 +27,16 @@ abstract case class ValidateTokenRule(
 ) extends StrictRule(method, pathRegex) {
 
   def authProvider: AuthProvider
+  private[this] val log = Logger(this.getClass)
 
   override def execute(nextFilter: (RequestHeader) => Future[Result], requestHeader: RequestHeader)(implicit ec: ExecutionContext): Future[Result] =
     RequestValidator.validate(scope, requestHeader, authProvider).flatMap[Result] {
       case Right(tokenInfo) =>
-        Logger.info(s"Request #${requestHeader.id} authenticated as: ${tokenInfo.userUid}")
+        log.info(s"Request #${requestHeader.id} authenticated as: ${tokenInfo.userUid}")
         nextFilter(requestHeader.withTokenInfo(tokenInfo))
 
       case Left(result) =>
-        Logger.info(s"Request #${requestHeader.id} failed auth")
+        log.info(s"Request #${requestHeader.id} failed auth")
         Future.successful(result)
     }
 }
