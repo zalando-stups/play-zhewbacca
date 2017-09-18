@@ -49,7 +49,6 @@ lazy val libraries =
 lazy val root = (project in file("."))
   .settings(commonSettings: _*)
   .settings(name := "play-Zhewbacca")
-  .settings(version := "0.2.2")
   .settings(libraryDependencies ++= (testDependencies ++ playDependencies ++ libraries))
   .settings(parallelExecution in Test := false)
 
