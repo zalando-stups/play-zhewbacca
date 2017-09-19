@@ -1,3 +1,6 @@
 target/
 logs/
+.idea/
+*.sc
+*.swp
 
