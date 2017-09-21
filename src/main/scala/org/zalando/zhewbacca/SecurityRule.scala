@@ -23,8 +23,7 @@ abstract class StrictRule(method: String, pathRegex: String) extends SecurityRul
 abstract case class ValidateTokenRule(
     method: String,
     pathRegex: String,
-    scope: Scope
-) extends StrictRule(method, pathRegex) {
+    scope: Scope) extends StrictRule(method, pathRegex) {
 
   def authProvider: AuthProvider
   private[this] val log = Logger(this.getClass)

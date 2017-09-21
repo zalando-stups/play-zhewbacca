@@ -10,6 +10,5 @@ object TokenInfo {
     (JsPath \ "access_token").read[String] and
     (JsPath \ "scope").read[Seq[String]].map(names => Scope(Set(names: _*))) and
     (JsPath \ "token_type").read[String] and
-    (JsPath \ "uid").read[String]
-  )(TokenInfo.apply _)
+    (JsPath \ "uid").read[String])(TokenInfo.apply _)
 }

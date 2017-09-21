@@ -1,0 +1,23 @@
+<!-- https://www.playframework.com/documentation/latest/SettingsLogger -->
+<configuration>
+
+  <conversionRule conversionWord="coloredLevel" converterClass="play.api.libs.logback.ColoredLevel" />
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d{"yyyy-MM-dd HH:mm:ss,SSS"} {%level} [%.20thread] [%mdc{X-Flow-ID:--}] [%logger{40}] %message%n%xException</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="ASYNCSTDOUT" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="STDOUT" />
+  </appender>
+
+  <logger name="play" level="INFO" />
+  <logger name="application" level="DEBUG" />
+
+  <root level="INFO">
+    <appender-ref ref="ASYNCSTDOUT" />
+  </root>
+
+</configuration>

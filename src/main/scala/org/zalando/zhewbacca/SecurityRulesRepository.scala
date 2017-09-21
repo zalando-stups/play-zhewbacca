@@ -3,11 +3,11 @@ package org.zalando.zhewbacca
 import javax.inject.Inject
 
 import com.typesafe.config.{Config, ConfigFactory}
-import play.api.mvc.RequestHeader
 import play.api.{Configuration, Logger}
+import scala.collection.JavaConverters._
 
-import scala.collection.JavaConversions._
 import play.api.http.HttpVerbs._
+import play.api.mvc.RequestHeader
 
 class SecurityRulesRepository @Inject() (configuration: Configuration, provider: AuthProvider) {
 
@@ -25,12 +25,12 @@ class SecurityRulesRepository @Inject() (configuration: Configuration, provider:
     rules.find(_.isApplicableTo(requestHeader))
 
   private def load(): Seq[StrictRule] = {
-    val securityRulesFileName = configuration.getString("authorisation.rules.file").getOrElse("security_rules.conf")
+    val securityRulesFileName = configuration.getOptional[String]("authorisation.rules.file").getOrElse("security_rules.conf")
     Logger.info(s"Configuration file for security rules: $securityRulesFileName")
 
     if (configFileExists(securityRulesFileName)) {
       ConfigFactory.load(securityRulesFileName)
-        .getConfigList(ConfigKeyRules)
+        .getConfigList(ConfigKeyRules).asScala
         .map(toRule)
     } else {
       sys.error(s"configuration file $securityRulesFileName for security rules not found")
@@ -82,7 +82,7 @@ class SecurityRulesRepository @Inject() (configuration: Configuration, provider:
 
   private def getScopeNames(config: Config): Option[Set[String]] = {
     if (config.hasPath(ConfigKeyScopes)) {
-      Some(config.getStringList(ConfigKeyScopes).toSet)
+      Some(config.getStringList(ConfigKeyScopes).asScala.toSet)
     } else {
       None
     }

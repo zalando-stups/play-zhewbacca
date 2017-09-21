@@ -17,7 +17,7 @@
   - [Contact](#contact)
   - [License](#license)
   
-Play! (v2.5) library to protect RESTful resource servers using OAuth2. According to [RFC 6749](https://tools.ietf.org/html/rfc6749#section-7):
+Play! (v2.5 - 2.6) library to protect RESTful resource servers using OAuth2. According to [RFC 6749](https://tools.ietf.org/html/rfc6749#section-7):
 
 > The client accesses protected resources by presenting the _access
   token_ to the _resource server_. The resource server MUST _validate_ the

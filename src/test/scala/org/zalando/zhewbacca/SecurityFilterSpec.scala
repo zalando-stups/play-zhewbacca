@@ -30,8 +30,7 @@ class SecurityFilterSpec extends PlaySpecification with BodyParsers {
     .routes(routes)
     .configure(
       "play.http.filters" -> "org.zalando.zhewbacca.TestingFilters",
-      "authorisation.rules.file" -> "security_filter.conf"
-    )
+      "authorisation.rules.file" -> "security_filter.conf")
     .build
 
   "SecurityFilter" should {

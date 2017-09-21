@@ -6,7 +6,7 @@ import play.api.test.FakeRequest
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
-
+import scala.concurrent.ExecutionContext.Implicits.global
 class RequestValidatorSpec extends Specification {
 
   val TestTokenInfo = TokenInfo("", Scope.Empty, "token type", "user uid")

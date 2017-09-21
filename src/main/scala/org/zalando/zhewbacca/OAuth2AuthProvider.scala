@@ -3,16 +3,15 @@ package org.zalando.zhewbacca
 import javax.inject.{Inject, Singleton}
 
 import play.api.Logger
-import play.api.libs.concurrent.Execution.Implicits._
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 /**
   * Authorization provider which uses Zalando's IAM API to verify given OAuth2 token.
   */
 @Singleton
-class OAuth2AuthProvider @Inject() (getTokenInfo: (OAuth2Token) => Future[Option[TokenInfo]])
-    extends AuthProvider {
+class OAuth2AuthProvider @Inject() (getTokenInfo: (OAuth2Token) => Future[Option[TokenInfo]])(implicit ec: ExecutionContext)
+  extends AuthProvider {
 
   val logger: Logger = Logger("security.OAuth2AuthProvider")
 
