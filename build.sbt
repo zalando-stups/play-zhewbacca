@@ -5,7 +5,7 @@ import scalariform.formatter.preferences._
 
 val commonSettings = Seq(
   organization := "org.zalando",
-  version := "0.3.1",
+  version := "0.3.2",
   scalaVersion := "2.12.3",
   scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8"),
   publishTo := {
@@ -26,7 +26,7 @@ val commonSettings = Seq(
   )
 )
 
-val playFrameworkVersion = "2.6.5"
+val playFrameworkVersion = "2.6.6"
 
 lazy val testDependencies =
   Seq(
@@ -69,7 +69,7 @@ lazy val compileScalastyle = taskKey[Unit]("compileScalastyle")
 
 compileScalastyle := scalastyle.in(Compile).toTask("").value
 
-(compileInputs in(Compile, compile)) <<= (compileInputs in(Compile, compile)) dependsOn compileScalastyle
+(compileInputs in(Compile, compile)) := ((compileInputs in(Compile, compile)) dependsOn compileScalastyle).value
 
 scalariformSettings(autoformat = true)
 
@@ -86,17 +86,17 @@ ScalariformKeys.preferences := ScalariformKeys.preferences.value
   .setPreference(SpacesAroundMultiImports, false)
 
 pomExtra := (
-  <url>https://github.com/zalando-incubator/play-zhewbacca</url>
+  <url>https://github.com/zalando-stups/play-zhewbacca</url>
     <licenses>
       <license>
         <name>MIT License</name>
-        <url>https://raw.githubusercontent.com/zalando-incubator/play-zhewbacca/master/LICENSE</url>
+        <url>https://raw.githubusercontent.com/zalando-stups/play-zhewbacca/master/LICENSE</url>
         <distribution>repo</distribution>
       </license>
     </licenses>
     <scm>
-      <url>git@github.com:zalando-incubator/play-zhewbacca.git</url>
-      <connection>scm:git:git@github.com:zalando-incubator/play-zhewbacca.git</connection>
+      <url>git@github.com:zalando-stups/play-zhewbacca.git</url>
+      <connection>scm:git:git@github.com:zalando-stups/play-zhewbacca.git</connection>
     </scm>
     <developers>
       <developer>
