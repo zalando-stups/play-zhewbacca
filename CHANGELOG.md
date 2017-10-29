@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [0.3.2] - 2017-10-26
+### Changed
+- Use sbt 1.0 to build
+- Upgrade Play Framework to 2.6.6
+
 ## [0.3.1] - 2017-10-21
 ### Changed
 - Scala and Playframework versions has been upgraded by @matterche. Now the library requires Scala v2.12.3 and Playframework v2.6.3. Note that there might be an [issue with circuit breaker](https://github.com/zalando-incubator/play-zhewbacca/issues/43).

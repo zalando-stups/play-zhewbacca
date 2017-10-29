@@ -1,10 +1,10 @@
 # Play-security library
 
-![Build Status - Master](https://travis-ci.org/zalando-incubator/play-zhewbacca.svg?branch=master)
+![Build Status - Master](https://travis-ci.org/zalando-stups/play-zhewbacca.svg?branch=master)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.zalando/play-zhewbacca_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.zalando/play-zhewbacca_2.11)
-[![codecov.io](https://codecov.io/github/zalando-incubator/play-zhewbacca/coverage.svg?branch=master)](https://codecov.io/github/zalando-incubator/play-zhewbacca?branch=master)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/fa1fb822bc1246508d343880c0b1868c)](https://www.codacy.com/app/dmitrykrivaltsevich/play-zhewbacca?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zalando-incubator/play-zhewbacca&amp;utm_campaign=Badge_Grade)
-[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/zalando-incubator/play-zhewbacca/master/LICENSE)
+[![codecov.io](https://codecov.io/github/zalando-incubator/play-zhewbacca/coverage.svg?branch=master)](https://codecov.io/github/zalando-stups/play-zhewbacca?branch=master)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/fa1fb822bc1246508d343880c0b1868c)](https://www.codacy.com/app/dmitrykrivaltsevich/play-zhewbacca?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zalando-stups/play-zhewbacca&amp;utm_campaign=Badge_Grade)
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/zalando-stups/play-zhewbacca/master/LICENSE)
 
 
 **[Table of Contents](http://tableofcontent.eu)**
@@ -67,7 +67,7 @@ We mainly decided to release this library because we saw the needs of OAuth2 pro
 Configure libraries dependencies in your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.zalando" %% "play-zhewbacca" % "0.2.2"
+libraryDependencies += "org.zalando" %% "play-zhewbacca" % "0.3.2"
 ```
 
 To configure Development environment:
