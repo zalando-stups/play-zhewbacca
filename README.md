@@ -156,15 +156,15 @@ authorisation.iam.retry.backoff.duration = 100
 # IAMClient depends on Play internal WS client so it also has to be configured.
 # The maximum time to wait when connecting to the remote host.
 # Play's default is 120 seconds
-play.ws.timeout.connection = 2000
+play.ws.timeout.connection = "2 sec"
 
 # The maximum time the request can stay idle when connetion is established but waiting for more data
 # Play's default is 120 seconds
-play.ws.timeout.idle = 2000
+play.ws.timeout.idle = "2 sec"
 
 # The total time you accept a request to take. It will be interrupted, whatever if the remote host is still sending data.
 # Play's default is none, to allow stream consuming.
-play.ws.timeout.request = 2000
+play.ws.timeout.request = "2 sec"
 
 play.http.filters = filters.MyFilters
 
