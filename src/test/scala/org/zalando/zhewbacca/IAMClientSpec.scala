@@ -40,6 +40,25 @@ class IAMClientSpec extends Specification {
       }
     }
 
+    "parse response into TokenInfo when client_id provided" in {
+      val app: Application = fakeApp(response = Results.Ok.sendResource("valid-token-with-client-id.json"))
+      Server.withApplication(application = app) { port =>
+        WsTestClient.withClient { client =>
+
+          val request = iamClient(port, client, app.actorSystem)
+            .apply(OAuth2Token("311f3ab2-4116-45a0-8bb0-50c3bca0441d"))
+
+          Await.result(request, 5.second) must beEqualTo(Some(TokenInfo(
+            "311f3ab2-4116-45a0-8bb0-50c3bca0441d",
+            Scope(Set("uid")),
+            "Bearer",
+            userUid = "user uid",
+            clientId = Some("Kashyyyk"))))
+
+        }
+      }
+    }
+
     "skip all unknown fields in response" in {
       val app: Application = fakeApp(response = Results.Ok.sendResource("valid-token-with-unknown-field.json"))
       Server.withApplication(application = app) { port =>

@@ -26,8 +26,8 @@ class OAuth2AuthProvider @Inject() (getTokenInfo: (OAuth2Token) => Future[Option
 
   private def validateTokenInfo(tokenInfo: TokenInfo, token: OAuth2Token, scope: Scope): AuthResult = {
     tokenInfo match {
-      case TokenInfo(`token`.value, thatScope, `bearerTokenType`, _) if scope.in(thatScope) => AuthTokenValid(tokenInfo)
-      case TokenInfo(_, thatScope, tokenType, _) =>
+      case TokenInfo(`token`.value, thatScope, `bearerTokenType`, _, _) if scope.in(thatScope) => AuthTokenValid(tokenInfo)
+      case TokenInfo(_, thatScope, tokenType, _, _) =>
         logger.info(s"Token '${token.toSafeString} has insufficient scope or wrong type, token scopes are ${thatScope.names.mkString(", ")}," +
           s"token type is $tokenType")
         invalid(token)
