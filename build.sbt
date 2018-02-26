@@ -7,6 +7,7 @@ val commonSettings = Seq(
   organization := "org.zalando",
   version := "0.3.2",
   scalaVersion := "2.12.3",
+  crossScalaVersions := Seq(scalaVersion.value, "2.11.11"),
   scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8"),
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
