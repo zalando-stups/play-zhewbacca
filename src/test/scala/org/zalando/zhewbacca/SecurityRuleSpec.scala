@@ -10,7 +10,7 @@ import play.api.test.Helpers._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class SecurityRuleSpec extends Specification with Mockito {
+class SecurityRuleSpec(implicit ec: ExecutionContext) extends Specification with Mockito {
   sequential
 
   "ValidateTokenRule" should {
@@ -28,7 +28,7 @@ class SecurityRuleSpec extends Specification with Mockito {
       rule.isApplicableTo(FakeRequest("GET", "/api2")) must beFalse
     }
 
-    "inject TokenInfo into authenticated request" in { implicit ec: ExecutionContext =>
+    "inject TokenInfo into authenticated request" in {
       import TokenInfoConverter._
 
       val request = FakeRequest("GET", "/")
@@ -44,7 +44,7 @@ class SecurityRuleSpec extends Specification with Mockito {
       contentAsString(rule.execute(nextFilter, request)) must beEqualTo("test-user-id")
     }
 
-    "return error for non-authenticated request" in { implicit ec: ExecutionContext =>
+    "return error for non-authenticated request" in {
       val request = FakeRequest("GET", "/")
       val rule = new ValidateTokenRule("GET", "/", Scope.Default) {
         override val authProvider: AuthProvider = {
@@ -59,7 +59,7 @@ class SecurityRuleSpec extends Specification with Mockito {
   }
 
   "ExplicitlyAllowedRule" should {
-    "pass unmodified request to next filter" in { implicit ec: ExecutionContext =>
+    "pass unmodified request to next filter" in {
       val testAttribute: TypedKey[String] = TypedKey("testAttribute")
       val originalRequest = FakeRequest("GET", "/foo").addAttr(testAttribute, "testValue")
       val rule = new ExplicitlyAllowedRule("GET", "/foo")
@@ -85,7 +85,7 @@ class SecurityRuleSpec extends Specification with Mockito {
       rule.isApplicableTo(FakeRequest("GET", "/bar/foo")) must beFalse
     }
 
-    "reject a request and respond with 403 HTTP status" in { implicit ec: ExecutionContext =>
+    "reject a request and respond with 403 HTTP status" in {
       val rule = new ExplicitlyDeniedRule("GET", "/foo")
       val nextFilter = { request: RequestHeader => Future.successful(Results.Ok) }
 
@@ -102,7 +102,7 @@ class SecurityRuleSpec extends Specification with Mockito {
       rule.isApplicableTo(FakeRequest()) must beTrue
     }
 
-    "reject a request and respond with 403 HTTP status" in { implicit ec: ExecutionContext =>
+    "reject a request and respond with 403 HTTP status" in {
       val rule = new DenyAllRule
       val nextFilter = { request: RequestHeader => Future.successful(Results.Ok) }
 
