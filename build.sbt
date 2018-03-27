@@ -5,8 +5,9 @@ import scalariform.formatter.preferences._
 
 val commonSettings = Seq(
   organization := "org.zalando",
-  version := "0.3.2",
-  scalaVersion := "2.12.3",
+  version := "0.3.3",
+  scalaVersion := "2.12.5",
+  crossScalaVersions := Seq("2.11.12", "2.12.5"),
   scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8"),
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
@@ -26,18 +27,18 @@ val commonSettings = Seq(
   )
 )
 
-val playFrameworkVersion = "2.6.6"
+val playFrameworkVersion = "2.6.12"
 
 lazy val testDependencies =
   Seq(
-    "org.specs2" %% "specs2-core" % "3.9.5" % "test",
-    "org.specs2" %% "specs2-junit" % "3.9.5" % "test"
+    "org.specs2" %% "specs2-core" % "4.0.3" % "test",
+    "org.specs2" %% "specs2-junit" % "4.0.3" % "test"
   )
 
 lazy val playDependencies =
   Seq(
     "com.typesafe.play" %% "play-ahc-ws" % playFrameworkVersion,
-    "com.typesafe.play" %% "play-json" % playFrameworkVersion,
+    "com.typesafe.play" %% "play-json" % "2.6.9",
     "com.typesafe.play" %% "play-ws" % playFrameworkVersion,
     "com.typesafe.play" %% "play" % playFrameworkVersion,
     "com.typesafe.play" %% "play-test" % playFrameworkVersion % "test",
@@ -51,7 +52,7 @@ lazy val libraries =
 
 lazy val root = (project in file("."))
   .settings(commonSettings: _*)
-  .settings(name := "play-Zhewbacca")
+  .settings(name := "play-zhewbacca")
   .settings(libraryDependencies ++= (testDependencies ++ playDependencies ++ libraries))
   .settings(parallelExecution in Test := false)
 

@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [0.3.3] - 2018-03-27
+### Changed
+- Upgrade Play Framework to 2.6.12
+- Cross-compilation into Scala 2.11 and 2.12
+
 ## [0.3.2] - 2017-10-26
 ### Changed
 - Use sbt 1.0 to build
