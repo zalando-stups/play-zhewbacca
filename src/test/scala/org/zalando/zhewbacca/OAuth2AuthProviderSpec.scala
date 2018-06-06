@@ -41,7 +41,7 @@ class OAuth2AuthProviderSpec extends Specification {
         Some(OAuth2Token("311f3ab2-4116-45a0-8bb0-50c3bca0441d")),
         Scope(Set("uid")))
 
-      Await.result(request, 1.second) must beEqualTo(AuthTokenInvalid)
+      Await.result(request, 1.second) must beEqualTo(AuthTokenInsufficient)
     }
 
     "reject token with insufficient scopes" in {
@@ -50,7 +50,7 @@ class OAuth2AuthProviderSpec extends Specification {
         Some(OAuth2Token("311f3ab2-4116-45a0-8bb0-50c3bca0441d")),
         Scope(Set("uid", "seo_description.write")))
 
-      Await.result(request, 1.second) must beEqualTo(AuthTokenInvalid)
+      Await.result(request, 1.second) must beEqualTo(AuthTokenInsufficient)
     }
 
     "reject non 'Bearer' token" in {
@@ -59,7 +59,7 @@ class OAuth2AuthProviderSpec extends Specification {
         Some(OAuth2Token("311f3ab2-4116-45a0-8bb0-50c3bca0441d")),
         Scope(Set("uid")))
 
-      Await.result(request, 1.second) must beEqualTo(AuthTokenInvalid)
+      Await.result(request, 1.second) must beEqualTo(AuthTokenInsufficient)
     }
 
     "reject empty token" in {

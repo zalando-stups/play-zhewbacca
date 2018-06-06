@@ -21,21 +21,19 @@ class OAuth2AuthProvider @Inject() (getTokenInfo: (OAuth2Token) => Future[Option
     token.map(validateToken(_, scope)).getOrElse(Future.successful(AuthTokenEmpty))
 
   private def validateToken(token: OAuth2Token, scope: Scope): Future[AuthResult] =
-    getTokenInfo(token).map(tokenInfoOpt =>
-      tokenInfoOpt.map(validateTokenInfo(_, token, scope)).getOrElse(invalid(token)))
+    getTokenInfo(token).map(validateTokenInfo(_, token, scope))
 
-  private def validateTokenInfo(tokenInfo: TokenInfo, token: OAuth2Token, scope: Scope): AuthResult = {
+  private def validateTokenInfo(tokenInfo: Option[TokenInfo], token: OAuth2Token, scope: Scope): AuthResult = {
     tokenInfo match {
-      case TokenInfo(`token`.value, thatScope, `bearerTokenType`, _, _) if scope.in(thatScope) => AuthTokenValid(tokenInfo)
-      case TokenInfo(_, thatScope, tokenType, _, _) =>
+      case Some(tokenInfo @ TokenInfo(`token`.value, thatScope, `bearerTokenType`, _, _)) if scope.in(thatScope) =>
+        AuthTokenValid(tokenInfo)
+      case Some(tokenInfo @ TokenInfo(_, thatScope, tokenType, _, _)) =>
         logger.info(s"Token '${token.toSafeString} has insufficient scope or wrong type, token scopes are ${thatScope.names.mkString(", ")}," +
           s"token type is $tokenType")
-        invalid(token)
+        AuthTokenInsufficient
+      case None =>
+        logger.debug(s"Token '${token.toSafeString} is not valid'")
+        AuthTokenInvalid
     }
-  }
-
-  private def invalid(token: OAuth2Token): AuthResult = {
-    logger.debug(s"Token '${token.toSafeString} is not valid'")
-    AuthTokenInvalid
   }
 }

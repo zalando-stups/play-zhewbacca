@@ -20,15 +20,15 @@ abstract class StrictRule(method: String, pathRegex: String) extends SecurityRul
 
 }
 
-abstract case class ValidateTokenRule(
+case class ValidateTokenRule(
+    authProvider: AuthProvider,
     method: String,
     pathRegex: String,
     scope: Scope) extends StrictRule(method, pathRegex) {
 
-  def authProvider: AuthProvider
   private[this] val log = Logger(this.getClass)
 
-  override def execute(nextFilter: (RequestHeader) => Future[Result], requestHeader: RequestHeader)(implicit ec: ExecutionContext): Future[Result] =
+  override def execute(nextFilter: RequestHeader => Future[Result], requestHeader: RequestHeader)(implicit ec: ExecutionContext): Future[Result] =
     RequestValidator.validate(scope, requestHeader, authProvider).flatMap[Result] {
       case Right(tokenInfo) =>
         log.info(s"Request #${requestHeader.id} authenticated as: ${tokenInfo.userUid}")
@@ -46,7 +46,7 @@ abstract case class ValidateTokenRule(
   */
 case class ExplicitlyAllowedRule(method: String, pathRegex: String) extends StrictRule(method, pathRegex) {
 
-  override def execute(nextFilter: (RequestHeader) => Future[Result], requestHeader: RequestHeader)(implicit ec: ExecutionContext): Future[Result] =
+  override def execute(nextFilter: RequestHeader => Future[Result], requestHeader: RequestHeader)(implicit ec: ExecutionContext): Future[Result] =
     nextFilter(requestHeader)
 
 }
@@ -54,19 +54,27 @@ case class ExplicitlyAllowedRule(method: String, pathRegex: String) extends Stri
 /**
   * Useful for explicitly denied HTTP methods or URIs.
   */
-case class ExplicitlyDeniedRule(method: String, pathRegex: String) extends StrictRule(method, pathRegex) {
-
-  override def execute(nextFilter: (RequestHeader) => Future[Result], requestHeader: RequestHeader)(implicit ec: ExecutionContext): Future[Result] =
-    Future.successful(Results.Forbidden)
-}
+case class ExplicitlyDeniedRule(authProvider: AuthProvider, method: String, pathRegex: String) extends StrictRule(method, pathRegex) with DenySecurityRule
 
 /**
   * Default rule for `SecurityFilter`.
   */
-class DenyAllRule extends SecurityRule {
-
+case class DenyAllRule(authProvider: AuthProvider) extends DenySecurityRule {
   override def isApplicableTo(requestHeader: RequestHeader): Boolean = true
+}
+
+trait DenySecurityRule extends SecurityRule {
+  def authProvider: AuthProvider
+
+  private[this] val log = Logger(this.getClass)
 
   override def execute(nextFilter: (RequestHeader) => Future[Result], requestHeader: RequestHeader)(implicit ec: ExecutionContext): Future[Result] =
-    Future.successful(Results.Forbidden)
+    RequestValidator.validate(Scope.Empty, requestHeader, authProvider).flatMap[Result] {
+      case Right(tokenInfo) =>
+        log.info("Request #${requestHeader.id} authenticated as: ${tokenInfo.userUid}")
+        Future.successful(Results.Forbidden)
+      case Left(result) =>
+        log.info(s"Request #${requestHeader.id} failed auth")
+        Future.successful(result)
+    }
 }

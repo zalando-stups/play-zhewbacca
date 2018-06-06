@@ -14,9 +14,7 @@ class SecurityRulesRepositorySpec extends Specification with Mockito {
     "load rules from default file" in {
       val provider = mock[AuthProvider]
       val repository = new SecurityRulesRepository(Configuration(), provider)
-      val expectedRule = new ValidateTokenRule("GET", "/foo", Scope(Set("uid", "entity.read"))) {
-        override val authProvider: AuthProvider = provider
-      }
+      val expectedRule = ValidateTokenRule(provider, "GET", "/foo", Scope(Set("uid", "entity.read")))
 
       repository.get(FakeRequest("GET", "/foo")) must beSome(expectedRule)
     }
@@ -25,9 +23,7 @@ class SecurityRulesRepositorySpec extends Specification with Mockito {
       val provider = mock[AuthProvider]
       val config = Configuration("authorisation.rules.file" -> "security_custom-security.conf")
       val repository = new SecurityRulesRepository(config, provider)
-      val expectedRule = new ValidateTokenRule("POST", "/bar.*", Scope(Set("uid"))) {
-        override val authProvider: AuthProvider = provider
-      }
+      val expectedRule = ValidateTokenRule(provider, "POST", "/bar.*", Scope(Set("uid")))
 
       repository.get(FakeRequest("POST", "/bar.*")) must beSome(expectedRule)
     }
@@ -44,9 +40,7 @@ class SecurityRulesRepositorySpec extends Specification with Mockito {
       val provider = mock[AuthProvider]
       val config = Configuration("authorisation.rules.file" -> "security_commented.conf")
       val repository = new SecurityRulesRepository(config, provider)
-      val expectedRule = new ValidateTokenRule("OPTIONS", "/", Scope(Set("app.resource.read"))) {
-        override val authProvider: AuthProvider = provider
-      }
+      val expectedRule = ValidateTokenRule(provider, "OPTIONS", "/", Scope(Set("app.resource.read")))
 
       repository.get(FakeRequest("OPTIONS", "/")) must beSome(expectedRule)
     }
