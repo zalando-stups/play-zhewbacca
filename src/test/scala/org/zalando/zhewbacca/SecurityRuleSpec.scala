@@ -72,22 +72,15 @@ class SecurityRuleSpec(implicit ec: ExecutionContext) extends Specification with
   "ExplicitlyDeniedRule" should {
 
     "be applicable to specific request" in {
-      val rule = ExplicitlyDeniedRule(authProvider(AuthTokenInvalid), "GET", "/foo.*")
+      val rule = ExplicitlyDeniedRule("GET", "/foo.*")
 
       rule.isApplicableTo(FakeRequest("GET", "/foo/bar")) must beTrue
       rule.isApplicableTo(FakeRequest("GET", "/bar/foo")) must beFalse
     }
 
-    "reject a request and respond with 401 HTTP status in case no token" in {
-      val rule = ExplicitlyDeniedRule(authProvider(AuthTokenEmpty), "GET", "/foo")
-      val nextFilter = { request: RequestHeader => Future.successful(Results.Ok) }
-
-      status(rule.execute(nextFilter, FakeRequest())) must beEqualTo(UNAUTHORIZED)
-    }
-
-    "reject a request and respond with 403 HTTP status in case valid token" in {
-      val rule = ExplicitlyDeniedRule(authProvider(AuthTokenValid(testTokenInfo)), "GET", "/foo")
-      val nextFilter = { request: RequestHeader => Future.successful(Results.Ok) }
+    "reject a request and respond with 403 HTTP" in {
+      val rule = ExplicitlyDeniedRule("GET", "/foo")
+      val nextFilter = { _: RequestHeader => Future.successful(Results.Ok) }
 
       status(rule.execute(nextFilter, FakeRequest())) must beEqualTo(FORBIDDEN)
     }
@@ -97,38 +90,16 @@ class SecurityRuleSpec(implicit ec: ExecutionContext) extends Specification with
   "DenyAllRule" should {
 
     "be applicable to all requests" in {
-      val rule = DenyAllRule(authProvider(AuthTokenInvalid))
+      val rule = DenyAllRule
       rule.isApplicableTo(FakeRequest()) must beTrue
     }
 
-    "reject a request and respond with 401 HTTP status in case empty token" in {
-      val rule = DenyAllRule(authProvider(AuthTokenEmpty))
+    "reject a request and respond with 403 HTTP status" in {
+      val rule = DenyAllRule
       val nextFilter = { _: RequestHeader => Future.successful(Results.Ok) }
 
-      status(rule.execute(nextFilter, FakeRequest())) must beEqualTo(UNAUTHORIZED)
-    }
-
-    "reject a request and respond with 401 HTTP status in case token is invalid " in {
-      val rule = DenyAllRule(authProvider(AuthTokenInvalid))
-      val nextFilter = { request: RequestHeader => Future.successful(Results.Ok) }
-
-      status(rule.execute(nextFilter, FakeRequest())) must beEqualTo(UNAUTHORIZED)
-    }
-
-    "reject a request and respond with 403 HTTP status in case valid token " in {
-      val rule = DenyAllRule(authProvider(AuthTokenValid(testTokenInfo)))
-      val nextFilter = { request: RequestHeader => Future.successful(Results.Ok) }
-
       status(rule.execute(nextFilter, FakeRequest())) must beEqualTo(FORBIDDEN)
     }
-
-    "reject a request and respond with 403 HTTP status in case" in {
-      val rule = DenyAllRule(authProvider(AuthTokenInsufficient))
-      val nextFilter = { request: RequestHeader => Future.successful(Results.Ok) }
-
-      status(rule.execute(nextFilter, FakeRequest())) must beEqualTo(FORBIDDEN)
-    }
-
   }
 
 }

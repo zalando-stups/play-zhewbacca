@@ -20,14 +20,13 @@ import scala.concurrent.{ExecutionContext, Future}
   */
 class SecurityFilter @Inject() (
     rulesRepository: SecurityRulesRepository,
-    provider: AuthProvider,
     implicit val mat: Materializer,
     implicit val ec: ExecutionContext) extends Filter {
 
   override def apply(nextFilter: RequestHeader => Future[Result])(requestHeader: RequestHeader): Future[Result] = {
     rulesRepository.get(requestHeader).getOrElse {
       Logger.debug(s"No security rules found for ${requestHeader.method} ${requestHeader.uri}. Access denied.")
-      DenyAllRule(provider)
+      DenyAllRule
     }.execute(nextFilter, requestHeader)
   }
 

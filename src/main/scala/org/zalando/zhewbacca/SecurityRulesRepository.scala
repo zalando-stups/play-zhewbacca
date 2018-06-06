@@ -45,7 +45,7 @@ class SecurityRulesRepository @Inject() (configuration: Configuration, provider:
 
       case (Some(method), pathRegex, Some(false), _) =>
         Logger.info(s"Explicitly denied all requests for method: '$method' and path regex: '$pathRegex'")
-        ExplicitlyDeniedRule(provider, method, pathRegex)
+        ExplicitlyDeniedRule(method, pathRegex)
 
       case (Some(method), pathRegex, None, Some(scopeNames)) =>
         Logger.info(s"Configured required scopes '$scopeNames' for method '$method' and path regex: '$pathRegex'")

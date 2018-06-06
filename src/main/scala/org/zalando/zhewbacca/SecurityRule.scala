@@ -8,7 +8,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait SecurityRule {
   def isApplicableTo(requestHeader: RequestHeader): Boolean
-  def execute(nextFilter: (RequestHeader) => Future[Result], requestHeader: RequestHeader)(implicit ec: ExecutionContext): Future[Result]
+  def execute(nextFilter: RequestHeader => Future[Result], requestHeader: RequestHeader)(implicit ec: ExecutionContext): Future[Result]
 }
 
 abstract class StrictRule(method: String, pathRegex: String) extends SecurityRule {
@@ -54,27 +54,16 @@ case class ExplicitlyAllowedRule(method: String, pathRegex: String) extends Stri
 /**
   * Useful for explicitly denied HTTP methods or URIs.
   */
-case class ExplicitlyDeniedRule(authProvider: AuthProvider, method: String, pathRegex: String) extends StrictRule(method, pathRegex) with DenySecurityRule
+case class ExplicitlyDeniedRule(method: String, pathRegex: String) extends StrictRule(method, pathRegex) with DenySecurityRule
 
 /**
   * Default rule for `SecurityFilter`.
   */
-case class DenyAllRule(authProvider: AuthProvider) extends DenySecurityRule {
+case object DenyAllRule extends DenySecurityRule {
   override def isApplicableTo(requestHeader: RequestHeader): Boolean = true
 }
 
 trait DenySecurityRule extends SecurityRule {
-  def authProvider: AuthProvider
-
-  private[this] val log = Logger(this.getClass)
-
-  override def execute(nextFilter: (RequestHeader) => Future[Result], requestHeader: RequestHeader)(implicit ec: ExecutionContext): Future[Result] =
-    RequestValidator.validate(Scope.Empty, requestHeader, authProvider).flatMap[Result] {
-      case Right(tokenInfo) =>
-        log.info("Request #${requestHeader.id} authenticated as: ${tokenInfo.userUid}")
-        Future.successful(Results.Forbidden)
-      case Left(result) =>
-        log.info(s"Request #${requestHeader.id} failed auth")
-        Future.successful(result)
-    }
+  override def execute(nextFilter: RequestHeader => Future[Result], requestHeader: RequestHeader)(implicit ec: ExecutionContext): Future[Result] =
+    Future.successful(Results.Forbidden)
 }
