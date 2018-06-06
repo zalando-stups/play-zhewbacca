@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [0.3.4] - 2018-06-06
+### Changed
+- Adjusted response codes by @MikhailLitvin. [Details](https://github.com/zalando-stups/play-zhewbacca/issues/53).
+
 ## [0.3.3] - 2018-03-27
 ### Changed
 - Upgrade Play Framework to 2.6.12
