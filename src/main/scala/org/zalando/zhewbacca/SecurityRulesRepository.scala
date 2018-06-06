@@ -41,17 +41,15 @@ class SecurityRulesRepository @Inject() (configuration: Configuration, provider:
     (getHttpMethod(config), config.getString(ConfigKeyPathRegex), getAllowedFlag(config), getScopeNames(config)) match {
       case (Some(method), pathRegex, Some(true), _) =>
         Logger.info(s"Explicitly allowed unauthorized requests for method: '$method' and path regex: '$pathRegex'")
-        new ExplicitlyAllowedRule(method, pathRegex)
+        ExplicitlyAllowedRule(method, pathRegex)
 
       case (Some(method), pathRegex, Some(false), _) =>
         Logger.info(s"Explicitly denied all requests for method: '$method' and path regex: '$pathRegex'")
-        new ExplicitlyDeniedRule(method, pathRegex)
+        ExplicitlyDeniedRule(method, pathRegex)
 
       case (Some(method), pathRegex, None, Some(scopeNames)) =>
         Logger.info(s"Configured required scopes '$scopeNames' for method '$method' and path regex: '$pathRegex'")
-        new ValidateTokenRule(method, pathRegex, Scope(scopeNames)) {
-          override val authProvider: AuthProvider = provider
-        }
+        ValidateTokenRule(provider, method, pathRegex, Scope(scopeNames))
 
       case _ =>
         sys.error(s"Invalid config: $config")

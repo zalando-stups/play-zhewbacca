@@ -13,13 +13,14 @@ private[zhewbacca] object RequestValidator {
   def validate[A](scope: Scope, requestHeader: RequestHeader, authProvider: AuthProvider)(implicit ec: ExecutionContext): Future[Either[Result, TokenInfo]] = {
     authProvider.valid(OAuth2Token.from(requestHeader), scope).map {
       case AuthTokenValid(tokenInfo) => Right(tokenInfo)
-      case AuthTokenInvalid => Left(Results.Forbidden)
+      case AuthTokenInvalid => Left(Results.Unauthorized)
       case AuthTokenEmpty => Left(Results.Unauthorized)
+      case AuthTokenInsufficient => Left(Results.Forbidden)
     } recover {
       case NonFatal(e) =>
         logger.error(e.getMessage, e)
-        logger.debug("Request forbidden because of failure in Authentication Provider")
-        Left(Results.Forbidden)
+        logger.debug("Request unauthorized because of failure in Authentication Provider")
+        Left(Results.Unauthorized)
     }
   }
 }
