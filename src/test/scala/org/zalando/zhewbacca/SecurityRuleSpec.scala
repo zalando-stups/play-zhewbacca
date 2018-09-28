@@ -13,7 +13,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class SecurityRuleSpec(implicit ec: ExecutionContext) extends Specification with Mockito {
   sequential
 
-  private val testTokenInfo = TokenInfo("", Scope.Default, "token-type", "test-user-id")
+  private val testTokenInfo = TokenInfo("", Scope.Default, "token-type", "test-user-id", "/employees")
   private def authProvider(expectedResult: AuthResult): AuthProvider = {
     val provider = mock[AuthProvider]
     provider.valid(any[Option[OAuth2Token]], any[Scope]) returns Future.successful(expectedResult)

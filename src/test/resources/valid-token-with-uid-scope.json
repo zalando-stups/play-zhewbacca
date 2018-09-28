@@ -4,5 +4,6 @@
   ],
   "token_type": "Bearer",
   "access_token": "311f3ab2-4116-45a0-8bb0-50c3bca0441d",
-  "uid": "user uid"
+  "uid": "user uid",
+  "realm": "/employees"
 }
