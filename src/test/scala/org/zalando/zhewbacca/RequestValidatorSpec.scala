@@ -9,18 +9,18 @@ import scala.concurrent.{Await, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 class RequestValidatorSpec extends Specification {
 
-  val TestTokenInfo = TokenInfo("", Scope.Empty, "token type", "user uid", realm = "/employees")
+  val testTokenInfo = TokenInfo("", Scope.Empty, "token type", "user uid", realm = "/employees")
 
   "Request Validator" should {
     "provide token information when token is valid" in {
       val authProvider = new AuthProvider {
         override def valid(token: Option[OAuth2Token], scope: Scope): Future[AuthResult] =
-          Future.successful(AuthTokenValid(TestTokenInfo))
+          Future.successful(AuthTokenValid(testTokenInfo))
       }
 
       val result = Await.result(RequestValidator.validate(Scope(Set("uid")), FakeRequest(), authProvider), 1.seconds)
       result.isRight must beTrue
-      result.right.get must beEqualTo(TestTokenInfo)
+      result.right.get must beEqualTo(testTokenInfo)
     }
 
     "return HTTP status 401 (unauthorized) when token was not provided" in {
