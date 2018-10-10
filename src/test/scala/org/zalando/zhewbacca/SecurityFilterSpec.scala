@@ -9,7 +9,7 @@ import play.api.{Application, Mode}
 
 class SecurityFilterSpec extends PlaySpecification with BodyParsers {
 
-  val TestTokenInfo = TokenInfo("", Scope.Empty, "token type", "user uid", "/employees")
+  val TestTokenInfo = TokenInfo("", Scope.Empty, "token type", "user uid", realm = "/employees")
 
   val routes: PartialFunction[(String, String), Handler] = {
     // test action returning action type. Shows the usage and makes it possible to test basic behaviour

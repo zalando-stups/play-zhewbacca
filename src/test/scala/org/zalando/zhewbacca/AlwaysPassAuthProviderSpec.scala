@@ -4,7 +4,7 @@ import org.specs2.concurrent.ExecutionEnv
 import org.specs2.mutable.Specification
 
 class AlwaysPassAuthProviderSpec(implicit ee: ExecutionEnv) extends Specification {
-  val TestTokenInfo = TokenInfo("", Scope.Empty, "token type", "user uid", "/employees")
+  val TestTokenInfo = TokenInfo("", Scope.Empty, "token type", "user uid", realm = "/employees")
 
   "'Always pass' Authorization Provider" should {
     "accept any tokens and scopes and treat them as valid" in {

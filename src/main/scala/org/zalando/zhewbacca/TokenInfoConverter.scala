@@ -25,7 +25,7 @@ object TokenInfoConverter {
       val clientId = underlying.attrs.get(ClientIdKey).flatten
       val realm = underlying.attrs.get(RealmKey).getOrElse(sys.error("realm is not provided"))
 
-      TokenInfo(accessToken, Scope(scopeNames), tokenType, uid, realm, clientId)
+      TokenInfo(accessToken, Scope(scopeNames), tokenType, uid, clientId, realm)
     }
 
     private[zhewbacca] def withTokenInfo(tok: TokenInfo): RequestHeader = {

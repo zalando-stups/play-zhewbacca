@@ -9,7 +9,7 @@ import scala.concurrent.{Await, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 class RequestValidatorSpec extends Specification {
 
-  val TestTokenInfo = TokenInfo("", Scope.Empty, "token type", "user uid", "/employees")
+  val TestTokenInfo = TokenInfo("", Scope.Empty, "token type", "user uid", realm = "/employees")
 
   "Request Validator" should {
     "provide token information when token is valid" in {
