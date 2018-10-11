@@ -19,8 +19,7 @@ class RequestValidatorSpec extends Specification {
       }
 
       val result = Await.result(RequestValidator.validate(Scope(Set("uid")), FakeRequest(), authProvider), 1.seconds)
-      result.isRight must beTrue
-      result.right.get must beEqualTo(testTokenInfo)
+      result.right must beEqualTo(Some(testTokenInfo))
     }
 
     "return HTTP status 401 (unauthorized) when token was not provided" in {
@@ -30,8 +29,7 @@ class RequestValidatorSpec extends Specification {
       }
 
       val result = Await.result(RequestValidator.validate(Scope(Set("uid")), FakeRequest(), authProvider), 1.seconds)
-      result.isLeft must beTrue
-      result.left.get must beEqualTo(Results.Unauthorized)
+      result.left must beEqualTo(Some(Results.Unauthorized))
     }
 
     "return HTTP status 401 (unauthorized) when token is in valid" in {
@@ -41,8 +39,7 @@ class RequestValidatorSpec extends Specification {
       }
 
       val result = Await.result(RequestValidator.validate(Scope(Set("uid")), FakeRequest(), authProvider), 1.seconds)
-      result.isLeft must beTrue
-      result.left.get must beEqualTo(Results.Unauthorized)
+      result.left must beEqualTo(Some(Results.Unauthorized))
     }
 
     "return HTTP status 401 (unauthorized) when Authorization provider has failed" in {
@@ -52,8 +49,7 @@ class RequestValidatorSpec extends Specification {
       }
 
       val result = Await.result(RequestValidator.validate(Scope(Set("uid")), FakeRequest(), authProvider), 1.seconds)
-      result.isLeft must beTrue
-      result.left.get must beEqualTo(Results.Unauthorized)
+      result.left must beEqualTo(Some(Results.Unauthorized))
     }
 
     "return HTTP status 403 (forbidden) in case insufficient scopes" in {
@@ -63,8 +59,7 @@ class RequestValidatorSpec extends Specification {
       }
 
       val result = Await.result(RequestValidator.validate(Scope(Set("uid")), FakeRequest(), authProvider), 1.seconds)
-      result.isLeft must beTrue
-      result.left.get must beEqualTo(Results.Forbidden)
+      result.left must beEqualTo(Some(Results.Forbidden))
     }
   }
 }
