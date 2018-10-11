@@ -9,7 +9,7 @@ import play.api.{Application, Mode}
 
 class SecurityFilterSpec extends PlaySpecification with BodyParsers {
 
-  val TestTokenInfo = TokenInfo("", Scope.Empty, "token type", "user uid")
+  val testTokenInfo = TokenInfo("", Scope.Empty, "token type", "user uid", realm = "/employees")
 
   val routes: PartialFunction[(String, String), Handler] = {
     // test action returning action type. Shows the usage and makes it possible to test basic behaviour
@@ -26,7 +26,7 @@ class SecurityFilterSpec extends PlaySpecification with BodyParsers {
 
   def appWithRoutes: Application = new GuiceApplicationBuilder()
     .in(Mode.Test)
-    .bindings(bind[AuthProvider] to new AlwaysPassAuthProvider(TestTokenInfo))
+    .bindings(bind[AuthProvider] to new AlwaysPassAuthProvider(testTokenInfo))
     .routes(routes)
     .configure(
       "play.http.filters" -> "org.zalando.zhewbacca.TestingFilters",
@@ -38,7 +38,7 @@ class SecurityFilterSpec extends PlaySpecification with BodyParsers {
     "allow protected inner action to access token info" in {
       val response = route(appWithRoutes, FakeRequest(GET, "/")).get
       status(response) must beEqualTo(OK)
-      contentAsString(response) must beEqualTo(TestTokenInfo.tokenType)
+      contentAsString(response) must beEqualTo(testTokenInfo.tokenType)
     }
 
     "deny an access when there is no security rule for the reguest is given" in {

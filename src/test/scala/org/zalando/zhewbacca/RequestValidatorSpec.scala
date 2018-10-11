@@ -9,18 +9,17 @@ import scala.concurrent.{Await, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 class RequestValidatorSpec extends Specification {
 
-  val TestTokenInfo = TokenInfo("", Scope.Empty, "token type", "user uid")
+  val testTokenInfo = TokenInfo("", Scope.Empty, "token type", "user uid", realm = "/employees")
 
   "Request Validator" should {
     "provide token information when token is valid" in {
       val authProvider = new AuthProvider {
         override def valid(token: Option[OAuth2Token], scope: Scope): Future[AuthResult] =
-          Future.successful(AuthTokenValid(TestTokenInfo))
+          Future.successful(AuthTokenValid(testTokenInfo))
       }
 
       val result = Await.result(RequestValidator.validate(Scope(Set("uid")), FakeRequest(), authProvider), 1.seconds)
-      result.isRight must beTrue
-      result.right.get must beEqualTo(TestTokenInfo)
+      result must beEqualTo(Right(testTokenInfo))
     }
 
     "return HTTP status 401 (unauthorized) when token was not provided" in {
@@ -30,8 +29,7 @@ class RequestValidatorSpec extends Specification {
       }
 
       val result = Await.result(RequestValidator.validate(Scope(Set("uid")), FakeRequest(), authProvider), 1.seconds)
-      result.isLeft must beTrue
-      result.left.get must beEqualTo(Results.Unauthorized)
+      result must beEqualTo(Left(Results.Unauthorized))
     }
 
     "return HTTP status 401 (unauthorized) when token is in valid" in {
@@ -41,8 +39,7 @@ class RequestValidatorSpec extends Specification {
       }
 
       val result = Await.result(RequestValidator.validate(Scope(Set("uid")), FakeRequest(), authProvider), 1.seconds)
-      result.isLeft must beTrue
-      result.left.get must beEqualTo(Results.Unauthorized)
+      result must beEqualTo(Left(Results.Unauthorized))
     }
 
     "return HTTP status 401 (unauthorized) when Authorization provider has failed" in {
@@ -52,8 +49,7 @@ class RequestValidatorSpec extends Specification {
       }
 
       val result = Await.result(RequestValidator.validate(Scope(Set("uid")), FakeRequest(), authProvider), 1.seconds)
-      result.isLeft must beTrue
-      result.left.get must beEqualTo(Results.Unauthorized)
+      result must beEqualTo(Left(Results.Unauthorized))
     }
 
     "return HTTP status 403 (forbidden) in case insufficient scopes" in {
@@ -63,8 +59,7 @@ class RequestValidatorSpec extends Specification {
       }
 
       val result = Await.result(RequestValidator.validate(Scope(Set("uid")), FakeRequest(), authProvider), 1.seconds)
-      result.isLeft must beTrue
-      result.left.get must beEqualTo(Results.Forbidden)
+      result must beEqualTo(Left(Results.Forbidden))
     }
   }
 }

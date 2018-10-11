@@ -34,7 +34,8 @@ class IAMClientSpec extends Specification {
             "311f3ab2-4116-45a0-8bb0-50c3bca0441d",
             Scope(Set("uid")),
             "Bearer",
-            userUid = "user uid")))
+            userUid = "user uid",
+            realm = "/employees")))
 
         }
       }
@@ -53,6 +54,7 @@ class IAMClientSpec extends Specification {
             Scope(Set("uid")),
             "Bearer",
             userUid = "user uid",
+            realm = "/employees",
             clientId = Some("Kashyyyk"))))
 
         }
@@ -71,7 +73,8 @@ class IAMClientSpec extends Specification {
             "311f3ab2-4116-45a0-8bb0-50c3bca0441d",
             Scope(Set("uid")),
             "Bearer",
-            userUid = "user uid")))
+            userUid = "user uid",
+            realm = "/services")))
 
         }
       }
