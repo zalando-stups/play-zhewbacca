@@ -141,17 +141,17 @@ authorisation.iam.endpoint = "https://info.services.auth.example.com/oauth2/toke
 # Maximum number of failures before opening the circuit
 authorisation.iam.cb.maxFailures = 4
 
-# Duration in milliseconds after which to consider a call a failure
-authorisation.iam.cb.callTimeout = 2000
+# Duration after which to consider a call a failure
+authorisation.iam.cb.callTimeout = "2 sec"
 
-# Duration in milliseconds after which to attempt to close the circuit
-authorisation.iam.cb.resetTimeout = 60000
+# Duration after which to attempt to close the circuit
+authorisation.iam.cb.resetTimeout = "60 sec"
 
 # Maximum number of retries
 authorisation.iam.maxRetries = 3
 
 # Duration in milliseconds of the exponential backoff
-authorisation.iam.retry.backoff.duration = 100
+authorisation.iam.retry.backoff.duration = "100 ms"
 
 # IAMClient depends on Play internal WS client so it also has to be configured.
 # The maximum time to wait when connecting to the remote host.
