@@ -2,7 +2,7 @@ package org.zalando.zhewbacca
 
 import akka.actor.ActorSystem
 import org.specs2.mutable.Specification
-import org.zalando.zhewbacca.metrics.NoOpPlugableMetrics
+import org.zalando.zhewbacca.metrics.NoOpPluggableMetrics
 import play.api.http.{DefaultFileMimeTypes, FileMimeTypesConfiguration, Port}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.WSClient
@@ -207,6 +207,6 @@ class IAMClientSpec extends Specification {
       // generate new name each time so different registries are used
       "metrics.name" -> java.util.UUID.randomUUID.toString))
 
-    new IAMClient(clientConfig, new NoOpPlugableMetrics, client, actorSystem, ExecutionContext.Implicits.global)
+    new IAMClient(clientConfig, new NoOpPluggableMetrics, client, actorSystem, ExecutionContext.Implicits.global)
   }
 }

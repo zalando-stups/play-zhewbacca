@@ -5,7 +5,7 @@ import javax.inject.{Inject, Singleton}
 
 import akka.actor.ActorSystem
 import akka.pattern.CircuitBreaker
-import org.zalando.zhewbacca.metrics.PlugableMetrics
+import org.zalando.zhewbacca.metrics.PluggableMetrics
 import play.api.http.Status._
 import play.api.libs.ws.WSClient
 import play.api.{Configuration, Logger}
@@ -28,7 +28,7 @@ import atmos.dsl.Slf4jSupport._
 @Singleton
 class IAMClient @Inject() (
     config: Configuration,
-    plugableMetrics: PlugableMetrics,
+    pluggableMetrics: PluggableMetrics,
     ws: WSClient,
     actorSystem: ActorSystem,
     implicit val ec: ExecutionContext) extends (OAuth2Token => Future[Option[TokenInfo]]) {
@@ -39,7 +39,7 @@ class IAMClient @Inject() (
   val METRICS_BREAKER_OPEN = 1
   val circuitStatus = new AtomicInteger()
 
-  plugableMetrics.gauge {
+  pluggableMetrics.gauge {
     circuitStatus.get
   }
 
@@ -81,7 +81,7 @@ class IAMClient @Inject() (
 
   override def apply(token: OAuth2Token): Future[Option[TokenInfo]] = {
     breaker.withCircuitBreaker(
-      plugableMetrics.timing(
+      pluggableMetrics.timing(
         retryAsync(s"Calling $authEndpoint") {
           ws.url(authEndpoint).withQueryStringParameters(("access_token", token.value)).get()
         })).map { response =>
