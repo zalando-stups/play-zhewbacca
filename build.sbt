@@ -9,7 +9,9 @@ val commonSettings = Seq(
   organization := "org.zalando",
   version := playFrameworkVersion,
   scalaVersion := "2.12.8",
-  crossScalaVersions := Seq("2.11.12", "2.12.8", "2.13.0-M5"),
+  // play 2.7.0 started to use scalac version 2.13.0-M5, but
+  // we cannot use "2.13.0-M5" because of "atmos" library (it does not support scala 2.13 yet)
+  crossScalaVersions := Seq("2.11.12", "2.12.8"),
   scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8", "-Xfatal-warnings"),
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
@@ -104,9 +106,6 @@ pomExtra := (
         <name>Dmitry Krivaltsevich</name>
       </developer>
       <developer>
-        <name>William Okuyama</name>
-      </developer>
-      <developer>
-        <name>Raymond Chenon</name>
+        <name>Mikhail Litvin</name>
       </developer>
     </developers>)

@@ -11,6 +11,8 @@ import play.api.mvc.RequestHeader
 
 class SecurityRulesRepository @Inject() (configuration: Configuration, provider: AuthProvider) {
 
+  private val logger = Logger(getClass)
+
   private val SupportedHttpMethods: Set[String] = Set(GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS)
 
   private val ConfigKeyMethod = "method"
@@ -20,8 +22,6 @@ class SecurityRulesRepository @Inject() (configuration: Configuration, provider:
   private val ConfigKeyRules = "rules"
 
   private val rules: Seq[StrictRule] = load()
-
-  private val logger = Logger(getClass)
 
   def get(requestHeader: RequestHeader): Option[StrictRule] =
     rules.find(_.isApplicableTo(requestHeader))

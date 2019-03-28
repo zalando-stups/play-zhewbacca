@@ -3,15 +3,14 @@ language: scala
 scala:
     - 2.11.12
     - 2.12.8
-    - 2.13.0-M5
 
 jdk:
     - oraclejdk8
 
 script:
-  - sbt -Dsbt.log.noformat=true clean +coverage +test
+  - sbt -mem 4096 -Dsbt.log.noformat=true clean +coverage +test
 after_success:
-  - sbt -Dsbt.log.noformat=true +coverageReport coveralls
+  - sbt +coverageReport coveralls
   - bash <(curl -s https://codecov.io/bash)
 
 # go faster on travis

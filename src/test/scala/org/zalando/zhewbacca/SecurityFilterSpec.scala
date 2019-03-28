@@ -17,7 +17,7 @@ class SecurityFilterSpec extends PlaySpecification with BodyParsers {
     .in(Mode.Test)
     .bindings(bind[AuthProvider] to new AlwaysPassAuthProvider(testTokenInfo))
     .overrides(
-      bind[Router].toProvider[TestRouterProvider])
+      bind[Router].toProvider[SecurityFilterTestRouterProvider])
     .configure(
       "play.http.filters" -> "org.zalando.zhewbacca.TestingFilters",
       "authorisation.rules.file" -> "security_filter.conf")
@@ -40,7 +40,7 @@ class SecurityFilterSpec extends PlaySpecification with BodyParsers {
 
 }
 
-class TestRouterProvider @Inject() (components: ControllerComponents) extends Provider[Router] {
+class SecurityFilterTestRouterProvider @Inject() (components: ControllerComponents) extends Provider[Router] {
 
   import components.{actionBuilder => Action}
   import play.api.routing.sird._
