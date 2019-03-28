@@ -1,15 +1,17 @@
 language: scala
 
 scala:
-    - 2.11.8
+    - 2.11.12
+    - 2.12.8
+    - 2.13.0-M5
 
 jdk:
     - oraclejdk8
 
 script:
-  - sbt clean coverage test
+  - sbt -Dsbt.log.noformat=true clean +coverage +test
 after_success:
-  - sbt coverageReport coveralls
+  - sbt -Dsbt.log.noformat=true +coverageReport coveralls
   - bash <(curl -s https://codecov.io/bash)
 
 # go faster on travis
@@ -18,4 +20,3 @@ sudo: false
 notifications:
     email:
         - dmitry.krivaltsevich@zalando.de
-        - cezary.lada.extern@zalando.de

@@ -3,11 +3,13 @@ import sbt.Keys._
 
 import scalariform.formatter.preferences._
 
+val playFrameworkVersion = "2.7.0"
+
 val commonSettings = Seq(
   organization := "org.zalando",
-  version := "0.3.4",
+  version := playFrameworkVersion,
   scalaVersion := "2.12.5",
-  crossScalaVersions := Seq("2.11.12", "2.12.5"),
+  crossScalaVersions := Seq("2.11.12", "2.12.8", "2.13.0-M5"),
   scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8"),
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
@@ -27,12 +29,10 @@ val commonSettings = Seq(
   )
 )
 
-val playFrameworkVersion = "2.6.12"
-
 lazy val testDependencies =
   Seq(
-    "org.specs2" %% "specs2-core" % "4.0.3" % "test",
-    "org.specs2" %% "specs2-junit" % "4.0.3" % "test"
+    "org.specs2" %% "specs2-core" % "4.3.5" % "test",
+    "org.specs2" %% "specs2-junit" % "4.3.5" % "test"
   )
 
 lazy val playDependencies =

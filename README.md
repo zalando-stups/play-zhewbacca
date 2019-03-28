@@ -56,7 +56,7 @@ We mainly decided to release this library because we saw the needs of OAuth2 pro
 Configure libraries dependencies in your `build.sbt`:
 
 ```scala
-libraryDependencies += "org.zalando" %% "play-zhewbacca" % "0.3.4"
+libraryDependencies += "org.zalando" %% "play-zhewbacca" % "2.7.0"
 ```
 
 To configure Development environment:
