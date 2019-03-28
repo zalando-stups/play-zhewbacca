@@ -8,9 +8,9 @@ val playFrameworkVersion = "2.7.0"
 val commonSettings = Seq(
   organization := "org.zalando",
   version := playFrameworkVersion,
-  scalaVersion := "2.12.5",
+  scalaVersion := "2.12.8",
   crossScalaVersions := Seq("2.11.12", "2.12.8", "2.13.0-M5"),
-  scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8"),
+  scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8", "-Xfatal-warnings"),
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
     if (isSnapshot.value) {
