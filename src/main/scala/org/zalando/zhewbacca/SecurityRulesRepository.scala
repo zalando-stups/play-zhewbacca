@@ -21,12 +21,14 @@ class SecurityRulesRepository @Inject() (configuration: Configuration, provider:
 
   private val rules: Seq[StrictRule] = load()
 
+  private val logger = Logger(getClass)
+
   def get(requestHeader: RequestHeader): Option[StrictRule] =
     rules.find(_.isApplicableTo(requestHeader))
 
   private def load(): Seq[StrictRule] = {
     val securityRulesFileName = configuration.getOptional[String]("authorisation.rules.file").getOrElse("security_rules.conf")
-    Logger.info(s"Configuration file for security rules: $securityRulesFileName")
+    logger.info(s"Configuration file for security rules: $securityRulesFileName")
 
     if (configFileExists(securityRulesFileName)) {
       ConfigFactory.load(securityRulesFileName)
@@ -40,15 +42,15 @@ class SecurityRulesRepository @Inject() (configuration: Configuration, provider:
   private def toRule(config: Config): StrictRule = {
     (getHttpMethod(config), config.getString(ConfigKeyPathRegex), getAllowedFlag(config), getScopeNames(config)) match {
       case (Some(method), pathRegex, Some(true), _) =>
-        Logger.info(s"Explicitly allowed unauthorized requests for method: '$method' and path regex: '$pathRegex'")
+        logger.info(s"Explicitly allowed unauthorized requests for method: '$method' and path regex: '$pathRegex'")
         ExplicitlyAllowedRule(method, pathRegex)
 
       case (Some(method), pathRegex, Some(false), _) =>
-        Logger.info(s"Explicitly denied all requests for method: '$method' and path regex: '$pathRegex'")
+        logger.info(s"Explicitly denied all requests for method: '$method' and path regex: '$pathRegex'")
         ExplicitlyDeniedRule(method, pathRegex)
 
       case (Some(method), pathRegex, None, Some(scopeNames)) =>
-        Logger.info(s"Configured required scopes '$scopeNames' for method '$method' and path regex: '$pathRegex'")
+        logger.info(s"Configured required scopes '$scopeNames' for method '$method' and path regex: '$pathRegex'")
         ValidateTokenRule(provider, method, pathRegex, Scope(scopeNames))
 
       case _ =>
