@@ -66,13 +66,13 @@ package modules
 
 import com.google.inject.AbstractModule
 import org.zalando.zhewbacca._
-import org.zalando.zhewbacca.metrics.{NoOpPlugableMetrics, PlugableMetrics}
+import org.zalando.zhewbacca.metrics.{NoOpPluggableMetrics, PluggableMetrics}
 
 class DevModule extends AbstractModule {
   val TestTokenInfo = TokenInfo("", Scope.Default, "token type", "user uid")
   
   override def configure(): Unit = {
-    bind(classOf[PlugableMetrics]).to(classOf[NoOpPlugableMetrics])
+    bind(classOf[PluggableMetrics]).to(classOf[NoOpPluggableMetrics])
     bind(classOf[AuthProvider]).toInstance(new AlwaysPassAuthProvider(TestTokenInfo))
   }
   
@@ -86,7 +86,7 @@ package modules
 
 import com.google.inject.{ TypeLiteral, AbstractModule }
 import org.zalando.zhewbacca._
-import org.zalando.zhewbacca.metrics.{NoOpPlugableMetrics, PlugableMetrics}
+import org.zalando.zhewbacca.metrics.{NoOpPluggableMetrics, PluggableMetrics}
 
 import scala.concurrent.Future
 
@@ -94,14 +94,14 @@ class ProdModule extends AbstractModule {
 
   override def configure(): Unit = {
     bind(classOf[AuthProvider]).to(classOf[OAuth2AuthProvider])
-    bind(classOf[PlugableMetrics]).to(classOf[NoOpPlugableMetrics])
+    bind(classOf[PluggableMetrics]).to(classOf[NoOpPluggableMetrics])
     bind(new TypeLiteral[(OAuth2Token) => Future[Option[TokenInfo]]]() {}).to(classOf[IAMClient])
   }
 
 }
 ```
 
-By default no metrics mechanism is used. User can implement ```PlugableMetrics``` to gather some simple metrics.
+By default no metrics mechanism is used. User can implement ```PluggableMetrics``` to gather some simple metrics.
 See ```org.zalando.zhewbacca.IAMClient``` to learn what can be measured.
 
 You need to include `org.zalando.zhewbacca.SecurityFilter` into your applications' filters:
