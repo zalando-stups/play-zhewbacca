@@ -6,7 +6,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/fa1fb822bc1246508d343880c0b1868c)](https://www.codacy.com/app/dmitrykrivaltsevich/play-zhewbacca?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zalando-stups/play-zhewbacca&amp;utm_campaign=Badge_Grade)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/zalando-stups/play-zhewbacca/master/LICENSE)
 
-Play! (v2.5 - 2.6) library to protect RESTful resource servers using OAuth2. According to [RFC 6749](https://tools.ietf.org/html/rfc6749#section-7):
+Play! library to protect RESTful resource servers using OAuth2. Supported Play! Framework versions are 2.5.x, 2.6.x, 2.7.x. According to [RFC 6749](https://tools.ietf.org/html/rfc6749#section-7):
 
 > The client accesses protected resources by presenting the _access
   token_ to the _resource server_. The resource server MUST _validate_ the
