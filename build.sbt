@@ -3,12 +3,16 @@ import sbt.Keys._
 
 import scalariform.formatter.preferences._
 
+val playFrameworkVersion = "2.7.0"
+
 val commonSettings = Seq(
   organization := "org.zalando",
-  version := "0.3.4",
-  scalaVersion := "2.12.5",
-  crossScalaVersions := Seq("2.11.12", "2.12.5"),
-  scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8"),
+  version := playFrameworkVersion,
+  scalaVersion := "2.12.8",
+  // play 2.7.0 started to use scalac version 2.13.0-M5, but
+  // we cannot use "2.13.0-M5" because of "atmos" library (it does not support scala 2.13 yet)
+  crossScalaVersions := Seq("2.11.12", "2.12.8"),
+  scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8", "-Xfatal-warnings"),
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
     if (isSnapshot.value) {
@@ -27,12 +31,10 @@ val commonSettings = Seq(
   )
 )
 
-val playFrameworkVersion = "2.6.12"
-
 lazy val testDependencies =
   Seq(
-    "org.specs2" %% "specs2-core" % "4.0.3" % "test",
-    "org.specs2" %% "specs2-junit" % "4.0.3" % "test"
+    "org.specs2" %% "specs2-core" % "4.3.5" % "test",
+    "org.specs2" %% "specs2-junit" % "4.3.5" % "test"
   )
 
 lazy val playDependencies =
@@ -104,9 +106,6 @@ pomExtra := (
         <name>Dmitry Krivaltsevich</name>
       </developer>
       <developer>
-        <name>William Okuyama</name>
-      </developer>
-      <developer>
-        <name>Raymond Chenon</name>
+        <name>Mikhail Litvin</name>
       </developer>
     </developers>)

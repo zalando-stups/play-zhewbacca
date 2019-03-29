@@ -23,9 +23,11 @@ class SecurityFilter @Inject() (
     implicit val mat: Materializer,
     implicit val ec: ExecutionContext) extends Filter {
 
+  private val logger = Logger(getClass)
+
   override def apply(nextFilter: RequestHeader => Future[Result])(requestHeader: RequestHeader): Future[Result] = {
     rulesRepository.get(requestHeader).getOrElse {
-      Logger.debug(s"No security rules found for ${requestHeader.method} ${requestHeader.uri}. Access denied.")
+      logger.debug(s"No security rules found for ${requestHeader.method} ${requestHeader.uri}. Access denied.")
       DenyAllRule
     }.execute(nextFilter, requestHeader)
   }

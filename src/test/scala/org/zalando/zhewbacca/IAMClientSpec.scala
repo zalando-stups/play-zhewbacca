@@ -1,12 +1,15 @@
 package org.zalando.zhewbacca
 
 import akka.actor.ActorSystem
+import javax.inject.{Inject, Provider}
 import org.specs2.mutable.Specification
 import org.zalando.zhewbacca.metrics.NoOpPluggableMetrics
 import play.api.http.{DefaultFileMimeTypes, FileMimeTypesConfiguration, Port}
+import play.api.inject._
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.WSClient
 import play.api.mvc._
+import play.api.routing.Router
 import play.api.test.WsTestClient
 import play.api.{Application, Configuration, Mode}
 import play.core.server.Server
@@ -176,17 +179,14 @@ class IAMClientSpec extends Specification {
   }
 
   def fakeApp(delay: Duration = 0.second, response: Result = Results.Ok): Application = {
-    val routes: PartialFunction[(String, String), Handler] = {
-      case ("GET", "/tokeninfo") => Action {
-        Thread.sleep(delay.toMillis)
-        response
-      }
-    }
-
     new GuiceApplicationBuilder()
       .in(Mode.Test)
-      .routes(routes)
       .configure("play.akka.actor-system" -> s"application_iam_client_${java.util.UUID.randomUUID}")
+      .bindings(
+        bind[Duration].toInstance(delay),
+        bind[Result].toInstance(response))
+      .overrides(
+        bind[Router].toProvider[IAMClientTestRouterProvider])
       .build
   }
 
@@ -208,5 +208,18 @@ class IAMClientSpec extends Specification {
       "metrics.name" -> java.util.UUID.randomUUID.toString))
 
     new IAMClient(clientConfig, new NoOpPluggableMetrics, client, actorSystem, ExecutionContext.Implicits.global)
+  }
+}
+
+class IAMClientTestRouterProvider @Inject() (components: ControllerComponents, delay: Duration, response: Result) extends Provider[Router] {
+
+  import components.{actionBuilder => Action}
+  import play.api.routing.sird._
+
+  override def get(): Router = Router.from {
+    case GET(p"/tokeninfo") => Action {
+      Thread.sleep(delay.toMillis)
+      response
+    }
   }
 }
