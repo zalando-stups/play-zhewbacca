@@ -3,7 +3,7 @@ import sbt.Keys._
 
 import scalariform.formatter.preferences._
 
-val playFrameworkVersion = "2.7.0"
+val playFrameworkVersion = "2.7.1"
 
 val commonSettings = Seq(
   organization := "org.zalando",
@@ -40,7 +40,7 @@ lazy val testDependencies =
 lazy val playDependencies =
   Seq(
     "com.typesafe.play" %% "play-ahc-ws" % playFrameworkVersion,
-    "com.typesafe.play" %% "play-json" % "2.6.9",
+    "com.typesafe.play" %% "play-json" % playFrameworkVersion,
     "com.typesafe.play" %% "play-ws" % playFrameworkVersion,
     "com.typesafe.play" %% "play" % playFrameworkVersion,
     "com.typesafe.play" %% "play-test" % playFrameworkVersion % "test",
